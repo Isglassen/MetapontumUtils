@@ -23,15 +23,15 @@ function getToday(date) {
     let outStr = ""
     for (let i = 0; i < lessons.length; i++) {
         if (lessons[i].isCurrent(date)) {
-            document.getElementById("laterTitle").innerHTML = "Kommande:"
-            document.getElementById("later").innerHTML += lessons[i].getString(date, false)
+            document.getElementById("currentTitle").innerHTML = "Just nu:"
+            document.getElementById("current").innerHTML += lessons[i].getString(date, false)
         }
         outStr += lessons[i].getString(date, false)
     }
     if (outStr.length > 0) {
-        document.getElementById("currentTitle").innerHTML = "Just nu:"
+        document.getElementById("laterTitle").innerHTML = "Kommande:"
     }
-    document.getElementById("current").innerHTML = outStr 
+    document.getElementById("later").innerHTML = outStr 
 }
 
 function getNextDay(date) {
