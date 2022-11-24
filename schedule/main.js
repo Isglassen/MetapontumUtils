@@ -23,26 +23,26 @@ function getToday(date) {
     let outStr = ""
     for (let i = 0; i < lessons.length; i++) {
         if (lessons[i].isCurrent(date)) {
-            document.getElementById("laterTitle").innerHTML = "Next:"
+            document.getElementById("laterTitle").innerHTML = "Kommande:"
             document.getElementById("later").innerHTML += lessons[i].getString(date, false)
         }
         outStr += lessons[i].getString(date, false)
     }
     if (outStr.length > 0) {
-        document.getElementById("currentTitle").innerHTML = "Upcoming:"
+        document.getElementById("currentTitle").innerHTML = "Just nu:"
     }
     document.getElementById("current").innerHTML = outStr 
 }
 
 function getNextDay(date) {
     const days = [
-        "Sunday:",
-        "Monday:",
-        "Tuesday:",
-        "Wednesday:",
-        "Thursday:",
-        "Friday:",
-        "Saturday:",
+        "Söndag:",
+        "Måndag:",
+        "Tisdag:",
+        "Onsdag:",
+        "Torsdag:",
+        "Fredag:",
+        "Lördag:",
     ]
     const weekDay = getNextDayWeek9A(date)
     const week = weekDay[0]

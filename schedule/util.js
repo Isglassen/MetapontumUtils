@@ -31,19 +31,19 @@ class ScheduleEntry {
 
     getString(date, includeAfter) {
         if (this.isCurrent(date)) {
-            return "<b>" + this.name + "</b> ends in <b>" + toTimeString(this.endMilliseconds - getInMilliseconds(date)) + "</b><br>"
+            return "<b>" + this.name + "</b> slutar om <b>" + toTimeString(this.endMilliseconds - getInMilliseconds(date)) + "</b><br>"
         }
         if (getInMilliseconds(date) < this.startMilliseconds) {
-            return "<b>" + this.name + "</b> starts in <b>" + toTimeString(this.startMilliseconds - getInMilliseconds(date)) + "</b><br>"
+            return "<b>" + this.name + "</b> börjar om <b>" + toTimeString(this.startMilliseconds - getInMilliseconds(date)) + "</b><br>"
         }
         if (getInMilliseconds(date) > this.endMilliseconds) {
-            if (includeAfter) return "<b>" + this.name + "</b> ended <b>" + toTimeString(getInMilliseconds(date) - this.endMilliseconds) + "</b> ago<br>"
+            if (includeAfter) return "<b>" + this.name + "</b> slutate <b>" + toTimeString(getInMilliseconds(date) - this.endMilliseconds) + "</b> sedan<br>"
             return ""
         }
     }
 
     getTimeString() {
-        return "<b>"+ this.name + "</b> at <b>" + Math.floor(this.startMilliseconds/(60*60*1000))+":"+
+        return "<b>"+ this.name + "</b> kl. <b>" + Math.floor(this.startMilliseconds/(60*60*1000))+":"+
         Math.floor((this.startMilliseconds-(Math.floor(this.startMilliseconds/(60*60*1000))*60*60*1000))/(60*1000)) + "</b><br>"
     }
 }
