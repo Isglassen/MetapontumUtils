@@ -4,4 +4,4 @@
 
 ## Funktioner
 
- [9A Schema](https://isglassen.github.io/MetapontumUtils/schedule)kan komma fler i framtiden)
+ [9A Schema](schedule) (kan komma fler i framtiden)
