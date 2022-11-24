@@ -41,4 +41,9 @@ class ScheduleEntry {
             return ""
         }
     }
+
+    getTimeString() {
+        return "<b>"+ this.name + "</b> at <b>" + Math.floor(this.startMilliseconds/(60*60*1000))+":"+
+        Math.floor((this.startMilliseconds-(Math.floor(this.startMilliseconds/(60*60*1000))*60*60*1000))/(60*1000)) + "</b><br>"
+    }
 }

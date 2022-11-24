@@ -1,10 +1,19 @@
 // @ts-nocheck
-setInterval(() => {
-    clearFields()
-    const now = new Date()
-    getToday(now)
-    getNextDay(now)
-}, 500)
+
+$(document).ready(function() {
+    function render() {
+        clearFields()
+        const now = new Date()
+        getToday(now)
+        getNextDay(now)
+    }
+
+    render()
+
+    setInterval(() => {
+        render
+    }, 500)
+})
 
 function getToday(date) {
     const week = getThisWeek9A(date);
@@ -15,7 +24,7 @@ function getToday(date) {
     for (let i = 0; i < lessons.length; i++) {
         if (lessons[i].isCurrent(date)) {
             document.getElementById("laterTitle").innerHTML = "Next:"
-            document.getElementById("later").innerHTML = lessons[i].getString(date, false)
+            document.getElementById("later").innerHTML += lessons[i].getString(date, false)
         }
         outStr += lessons[i].getString(date, false)
     }
@@ -26,8 +35,27 @@ function getToday(date) {
 }
 
 function getNextDay(date) {
-    document.getElementById("nextDayTitle").innerHTML = "Next School Day:"
-    document.getElementById("nextDay").innerHTML = "Not implemented yet"
+    const days = [
+        "Sunday:",
+        "Monday:",
+        "Tuesday:",
+        "Wednesday:",
+        "Thursday:",
+        "Friday:",
+        "Saturday:",
+    ]
+    const weekDay = getNextDayWeek9A(date)
+    const week = weekDay[0]
+    const weekday = weekDay[1]
+    const lessons = week[weekday-1]
+    let outStr = ""
+    for (let i = 0; i < lessons.length; i++) {
+        outStr += lessons[i].getTimeString()
+    }
+    document.getElementById("nextDay").innerHTML = outStr
+    if (outStr.length > 0) {
+        document.getElementById("nextDayTitle").innerHTML = days[weekday]
+    }
 }
 
 function clearFields() {
