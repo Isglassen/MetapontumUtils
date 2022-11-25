@@ -23,6 +23,7 @@ function getToday(date) {
         if (lessons[i].isCurrent(date)) {
             document.getElementById("currentTitle").innerHTML = "Just nu:"
             document.getElementById("current").innerHTML += lessons[i].getString(date, false)
+            continue
         }
         outStr += lessons[i].getString(date, false)
     }
