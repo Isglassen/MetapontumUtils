@@ -2,9 +2,7 @@ function toTimeString(milliseconds, includeSeconds=true) {
     const h = Math.floor(milliseconds/(60*60*1000))
     const m = Math.floor((milliseconds-(h*60*60*1000))/(60*1000))
     const s = Math.floor((milliseconds-(h*60*60*1000)-(m*60*1000))/(1000))
-    return (h.toString().length == 1? "0"+h: h)+":"+
-    (m.toString().length == 1? "0"+m: m)+(includeSeconds? (":"+
-    (s.toString().length == 1? "0"+s: s)): "")
+    return `${h.toString().length == 1? "0"+h: h}:${m.toString().length == 1? "0"+m: m}${includeSeconds? (":"+(s.toString().length == 1? "0"+s: s)): ""}`
 }
 
 function getInMilliseconds(date) {
@@ -12,11 +10,27 @@ function getInMilliseconds(date) {
 }
 
 class ScheduleEntry {
-    constructor(name, weekday, startHour, startMinute, endHour, endMinute) {
+    constructor(groups, name, weekday, startHour, startMinute, endHour, endMinute) {
+        this.groups = groups
         this.name = name
         this.weekday = weekday
         this.startMilliseconds = startHour*60*60*1000 + startMinute*60*1000
         this.endMilliseconds = endHour*60*60*1000 + endMinute*60*1000
+    }
+
+    studentHas(groups) {
+        if (this.groups.length == 0) return true
+        for (let i=0; i<this.groups.length; i++) {
+            for (let i2=0; i2<groups.length; i2++) {
+                if (groups[i2] == this.groups[i]) return true
+            }
+        }
+        return false
+    }
+
+    getTitle() {
+        if (this.groups.length == 0) return this.name
+        return `[${this.groups.join(",")}]: ${this.name}`
     }
 
     /**
@@ -31,18 +45,18 @@ class ScheduleEntry {
 
     getString(date, includeAfter) {
         if (this.isCurrent(date)) {
-            return "<b>" + this.name + "</b> slutar om <b>" + toTimeString(this.endMilliseconds - getInMilliseconds(date)) + "</b><br>"
+            return `<b>${this.getTitle()}</b> slutar om <b>${toTimeString(this.endMilliseconds - getInMilliseconds(date))}</b><br>`
         }
         if (getInMilliseconds(date) < this.startMilliseconds) {
-            return "<b>" + this.name + "</b> börjar om <b>" + toTimeString(this.startMilliseconds - getInMilliseconds(date)) + "</b><br>"
+            return `<b>${this.getTitle()}</b> börjar om <b>${toTimeString(this.startMilliseconds - getInMilliseconds(date))}</b><br>`
         }
         if (getInMilliseconds(date) > this.endMilliseconds && includeAfter) {
-            return "<b>" + this.name + "</b> slutate <b>" + toTimeString(getInMilliseconds(date) - this.endMilliseconds) + "</b> sedan<br>"
+            return `<b>${this.getTitle()}</b> slutate <b>${toTimeString(getInMilliseconds(date) - this.endMilliseconds)}</b> sedan<br>`
         }
         return ""
     }
 
     getTimeString() {
-        return "<b>"+ this.name + "</b> kl. <b>" + toTimeString(this.startMilliseconds, false) + "</b><br>"
+        return `<b>${this.getTitle()}</b> kl. <b>${toTimeString(this.startMilliseconds, false)}</b><br>`
     }
 }
