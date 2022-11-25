@@ -4,6 +4,7 @@ $(document).ready(function() {
     function render() {
         clearFields()
         const now = new Date()
+        document.getElementById("time").innerHTML = toTimeString(getInMilliseconds(now))
         getToday(now)
         getNextDay(now)
     }
