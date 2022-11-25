@@ -1,5 +1,5 @@
-const lastWeekSeperator = new Date(2022, 10, 19)
-const weekSeperator = new Date(2022, 10, 26)
+const lastWeekSeperator = new Date(2022, 10, 21)
+const weekSeperator = new Date(2022, 10, 28)
 /**
  * @param {Date} date 
  */
