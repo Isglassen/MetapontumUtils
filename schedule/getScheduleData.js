@@ -4,6 +4,7 @@
 // that can the be used to construct ScheduleEntries
 
 // TODO: Make check so that multiple lessons at the same time work
+// TODO: Make it actually work
 
 // Get schedule table
 const scheduleTable = document.getElementById("schedule_cont_content").children[1].children[0]
