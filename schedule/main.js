@@ -10,9 +10,7 @@ $(document).ready(function() {
 
     render()
 
-    setInterval(() => {
-        render
-    }, 500)
+    setInterval(render, 500)
 })
 
 function getToday(date) {

@@ -29,6 +29,7 @@ const thisWeek9A = [
 
     ],
     [
+        new ScheduleEntry("[Mu Val]: Val Musik", 8, 0, 8, 40),
         new ScheduleEntry("Svenska", 4, 8, 45, 10, 5),
         new ScheduleEntry("Samhällskunskap", 4, 10, 10, 10, 50),
         new ScheduleEntry("Lunch", 4, 11, 45, 12, 5),
