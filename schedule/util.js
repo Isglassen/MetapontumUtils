@@ -36,10 +36,10 @@ class ScheduleEntry {
         if (getInMilliseconds(date) < this.startMilliseconds) {
             return "<b>" + this.name + "</b> börjar om <b>" + toTimeString(this.startMilliseconds - getInMilliseconds(date)) + "</b><br>"
         }
-        if (getInMilliseconds(date) > this.endMilliseconds) {
-            if (includeAfter) return "<b>" + this.name + "</b> slutate <b>" + toTimeString(getInMilliseconds(date) - this.endMilliseconds) + "</b> sedan<br>"
-            return ""
+        if (getInMilliseconds(date) > this.endMilliseconds && includeAfter) {
+            return "<b>" + this.name + "</b> slutate <b>" + toTimeString(getInMilliseconds(date) - this.endMilliseconds) + "</b> sedan<br>"
         }
+        return ""
     }
 
     getTimeString() {
