@@ -1,6 +1,6 @@
 # MetapontumUtils
 
- En hemsida för Metapontum elever
+ En hemsida för att göra Metapontums elevers liv enklare
 
 ## Funktioner
 
