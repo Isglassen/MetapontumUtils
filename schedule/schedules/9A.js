@@ -50,7 +50,7 @@ const nextWeek9A = [
         new ScheduleEntry("[Y]: Fysik/Teknik", 0, 13, 45, 14, 25),
         new ScheduleEntry("[En]: Morderna Språk", 0, 14, 30, 15, 10),
         new ScheduleEntry("[Ej En]: Morderna Språk", 0, 14, 30, 15, 30),
-        new ScheduleEntry("[Extra Spets]: Matte 3c", 0, 8, 45, 9, 25),
+        new ScheduleEntry("[Extra Spets]: Matte 3c", 0, 15, 45, 16, 25),
     ],
     [
         new ScheduleEntry("Kemi", 1, 8, 0, 8, 40),
@@ -108,7 +108,7 @@ const twoWeeks9A = [
         new ScheduleEntry("[X]: Fysik/Teknik", 0, 13, 45, 14, 25),
         new ScheduleEntry("[En]: Morderna Språk", 0, 14, 30, 15, 10),
         new ScheduleEntry("[Ej En]: Morderna Språk", 0, 14, 30, 15, 30),
-        new ScheduleEntry("[Extra Spets]: Matte 3c", 0, 8, 45, 9, 25),
+        new ScheduleEntry("[Extra Spets]: Matte 3c", 0, 15, 45, 16, 25),
     ],
     [
         new ScheduleEntry("Kemi", 1, 8, 0, 8, 40),
