@@ -1,10 +1,10 @@
-function toTimeString(milliseconds) {
+function toTimeString(milliseconds, includeSeconds=true) {
     const h = Math.floor(milliseconds/(60*60*1000))
     const m = Math.floor((milliseconds-(h*60*60*1000))/(60*1000))
     const s = Math.floor((milliseconds-(h*60*60*1000)-(m*60*1000))/(1000))
     return (h.toString().length == 1? "0"+h: h)+":"+
-    (m.toString().length == 1? "0"+m: m)+":"+
-    (s.toString().length == 1? "0"+s: s)
+    (m.toString().length == 1? "0"+m: m)+(includeSeconds? (":"+
+    (s.toString().length == 1? "0"+s: s)): "")
 }
 
 function getInMilliseconds(date) {
@@ -43,7 +43,6 @@ class ScheduleEntry {
     }
 
     getTimeString() {
-        return "<b>"+ this.name + "</b> kl. <b>" + Math.floor(this.startMilliseconds/(60*60*1000))+":"+
-        Math.floor((this.startMilliseconds-(Math.floor(this.startMilliseconds/(60*60*1000))*60*60*1000))/(60*1000)) + "</b><br>"
+        return "<b>"+ this.name + "</b> kl. <b>" + toTimeString(this.startMilliseconds, false) + "</b><br>"
     }
 }
