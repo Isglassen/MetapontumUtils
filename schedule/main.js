@@ -1,6 +1,7 @@
 // @ts-nocheck
 
 $(document).ready(function() {
+    document.body.innerHTML+='<h2 id="currentTitle"></h2><p id="current"></p><h2 id="laterTitle"></h2><p id="later"></p><h2 id="nextDayTitle"></h2><p id="nextDay"></p>'
     function render() {
         clearFields()
         const now = new Date()
@@ -15,9 +16,10 @@ $(document).ready(function() {
 })
 
 function getToday(date) {
-    const week = getThisWeek9A(date);
+    const week = getThisWeek(date, currentSchedule);
     //console.table(week)
     //console.log(now.getDay())
+    if (date.getDay()-1 < 0 || date.getDay()-1>4) return
     const lessons = week[date.getDay()-1]
     let outStr = ""
     for (let i = 0; i < lessons.length; i++) {
@@ -44,9 +46,9 @@ function getNextDay(date) {
         "Fredag:",
         "Lördag:",
     ]
-    const weekDay = getNextDayWeek9A(date)
-    const week = weekDay[0]
-    const weekday = weekDay[1]
+    const weekAndDay = getNextDayWeek(date, currentSchedule)
+    const week = weekAndDay[0]
+    const weekday = weekAndDay[1]
     const lessons = week[weekday-1]
     let outStr = ""
     for (let i = 0; i < lessons.length; i++) {

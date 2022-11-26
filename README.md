@@ -4,4 +4,4 @@
 
 ## Funktioner
 
- [9A Schema](schedule) (kan komma fler i framtiden)
+ [Scheman](schedule) för 9A och 9B
