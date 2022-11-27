@@ -96,8 +96,8 @@ for day in lessons:
         outObj.append(weekday) # Weekday of this lesson
         outObj.append(int(startTimes[0])) # Start time hours
         outObj.append(int(startTimes[1])) # Start time minutes
-        outObj.append(int(startTimes[0])) # End time hours 
-        outObj.append(int(startTimes[1])) # End time minutes
+        outObj.append(int(endTimes[0])) # End time hours 
+        outObj.append(int(endTimes[1])) # End time minutes
         dayData.append(outObj)
     output.append(dayData)
     weekday += 1

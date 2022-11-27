@@ -16,10 +16,12 @@ $(document).ready(function() {
 })
 
 function getToday(date) {
+    // If it's not a school day we dont have a schedule to try and show
+    if (date.getDay()-1 < 0 || date.getDay()-1>4) return
+
     const week = getThisWeek(date, currentSchedule);
     //console.table(week)
-    //console.log(now.getDay())
-    if (date.getDay()-1 < 0 || date.getDay()-1>4) return
+    //console.log(date.getDay())
     const lessons = week[date.getDay()-1]
     let outStr = ""
     for (let i = 0; i < lessons.length; i++) {
@@ -49,6 +51,8 @@ function getNextDay(date) {
     const weekAndDay = getNextDayWeek(date, currentSchedule)
     const week = weekAndDay[0]
     const weekday = weekAndDay[1]
+    //console.table(week)
+    //console.log(weekday)
     const lessons = week[weekday-1]
     let outStr = ""
     for (let i = 0; i < lessons.length; i++) {
