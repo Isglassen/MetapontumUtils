@@ -3,7 +3,7 @@ const weekSeperator = new Date(2022, 11, 5)
 
 function getThisWeek(date, schedule) {
     if (date.getTime() - weekSeperator.getTime()>0) return schedules[schedule].nextWeek;
-    return schedules[schedule].thisWeek9A
+    return schedules[schedule].thisWeek
 }
 
 function getNextDayWeek(date, schedule) {
