@@ -1,13 +1,30 @@
 // @ts-nocheck
 
+let testTime = null
+
 $(document).ready(function() {
     document.body.innerHTML+='<h2 id="currentTitle"></h2><p id="current"></p><h2 id="laterTitle"></h2><p id="later"></p><h2 id="nextDayTitle"></h2><p id="nextDay"></p>'
     function render() {
         clearFields()
-        const now = new Date()
+        let now = new Date()
+
+        // For using a custom times instead of current time
+        if (testTime !== null) now = testTime
+
         document.getElementById("time").innerHTML = toTimeString(getInMilliseconds(now), Math.floor, true)
         getToday(now)
         getNextDay(now)
+
+        // Make the test time move
+        if (testTime !== null) testTime = new Date(
+            testTime.getFullYear(),
+            testTime.getMonth(),
+            testTime.getDate(),
+            testTime.getHours(),
+            testTime.getMinutes(),
+            testTime.getSeconds(),
+            testTime.getMilliseconds() + 500
+        )
     }
 
     render()
