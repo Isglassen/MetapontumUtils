@@ -1,10 +1,15 @@
 // @ts-nocheck
 
 let testTime = null
+let run_scripts = true
 
 $(document).ready(function() {
     document.body.innerHTML+='<h2 id="currentTitle"></h2><p id="current"></p><h2 id="laterTitle"></h2><p id="later"></p><h2 id="nextDayTitle"></h2><p id="nextDay"></p>'
+    document.body.innerHTML+='<h2>Stop är användbart för att kopiera text</h2><button id="start_scripts">Start</button><button id="stop_scripts">Stop</button>'
+    $("#start_scripts").click(function(){console.log("On");run_scripts=true})
+    $("#stop_scripts").click(function(){console.log("Off");run_scripts=false})
     function render() {
+        if (!run_scripts) return
         clearFields()
         let now = new Date()
 
