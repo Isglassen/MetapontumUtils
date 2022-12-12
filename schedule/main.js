@@ -12,6 +12,7 @@ $(document).ready(function() {
         if (testTime !== null) now = testTime
 
         document.getElementById("time").innerHTML = toTimeString(getInMilliseconds(now), Math.floor, true)
+        document.getElementById("date").innerHTML = now.getDate()+"/"+(now.getMonth()+1)
         getToday(now)
         getNextDay(now)
 
