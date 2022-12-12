@@ -57,27 +57,27 @@ function getToday(date) {
 
 function getNextDay(date) {
     const days = [
-        "Söndag:",
-        "Måndag:",
-        "Tisdag:",
-        "Onsdag:",
-        "Torsdag:",
-        "Fredag:",
-        "Lördag:",
+        "Söndag",
+        "Måndag",
+        "Tisdag",
+        "Onsdag",
+        "Torsdag",
+        "Fredag",
+        "Lördag",
     ]
     const weekAndDay = getNextDayWeek(date, currentSchedule)
     const week = weekAndDay[0]
     const weekday = weekAndDay[1]
-    //console.table(week)
-    //console.log(weekday)
-    const lessons = week[weekday-1]
+    const lessons = weekAndDay[2]
     let outStr = ""
     for (let i = 0; i < lessons.length; i++) {
         outStr += lessons[i].getTimeString()
     }
     document.getElementById("nextDay").innerHTML = outStr
     if (outStr.length > 0) {
-        document.getElementById("nextDayTitle").innerHTML = days[weekday]
+        let nextDate = week == "thisWeek"? new Date(lastWeekSeperator): new Date(weekSeperator)
+        nextDate.setDate(nextDate.getDate() + weekday-1)
+        document.getElementById("nextDayTitle").innerHTML = days[weekday]+" "+nextDate.getDate()+"/"+(nextDate.getMonth()+1)
     }
 }
 

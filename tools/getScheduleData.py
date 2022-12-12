@@ -110,7 +110,7 @@ for day in output:
     for lesson in day:
         outStr += 2*indent+"new ScheduleEntry(["+repr(lesson[0])+"], "+repr(lesson[1])+", "+repr(lesson[2])+", "+repr(lesson[3])+", "+repr(lesson[4])+", "+repr(lesson[5])+", "+repr(lesson[6])+"),\n"
     outStr += indent+"],\n"
-outStr += "]"
+outStr += "],"
 
 with jsonPath.open("w") as f:
     f.write(json.dumps(output, indent=2))
