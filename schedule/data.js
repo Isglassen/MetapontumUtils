@@ -2,44 +2,62 @@ const lastWeekSeperator = new Date(2022, 11, 12)
 const weekSeperator = new Date(2022, 11, 19)
 
 function getThisWeek(date, schedule) {
+    // TODO: Add a case for if it's past the next week
+    // If the date's time is past the weekSeperator, return the next week
     if (date.getTime() - weekSeperator.getTime()>0) return schedules[schedule].nextWeek;
+    // Otherwise return the current week
     return schedules[schedule].thisWeek
 }
 
 function getNextDayWeek(date, schedule) {
+    // Initialise variables for the start of counting
     let week = ""
     let weekday = 0
+
+    // If it's before this week, the next day is monday this week
     if (lastWeekSeperator.getTime() - date.getTime()>0) {
         week = "thisWeek"
         weekday = 1
     }
+    // If it's the next week
     else if (weekSeperator.getTime() - date.getTime()<0) {
+        // TODO: Add a case for if it's past the next week
+        // If it's a weekend, we have no next day
         if (date.getDay() == 0 || date.getDay() > 4) {
             console.log("No day")
             return ["",0,[]]
         }
+        // Otherwise simply start at the next day
         week = "nextWeek"
         weekday = date.getDay() + 1
     }
+    // If it's the current week, but the weekend, set the next week
     else if (date.getDay() == 0 || date.getDay() > 4) {
         week = "nextWeek"
         weekday = 1
     }
+    // Otherwise simply use next day
     else {
         week = "thisWeek"
         weekday = date.getDay() + 1
     }
+
+    // Loop through every day from the previously set day until we find one with lessons
     while (schedules[schedule][week][weekday-1].length === 0) {
         weekday++
+        // If the next day is a weekend this week, start on next week
         if (weekday>5 && week === "thisWeek") {
             weekday = 1
             week = "nextWeek"
         }
+        // If the next day is a weekend next week, we don't have any lessons to display
         if (weekday>5 && week === "nextWeek") {
             console.log("Nothing in day")
             return ["",0,[]]
         }
     }
+
+    // Return week, weekday, schedule
     return [week, weekday, schedules[schedule][week][weekday-1]]
 }
 
