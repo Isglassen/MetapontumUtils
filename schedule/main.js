@@ -2,15 +2,20 @@
 
 let testTime = null
 let run_scripts = true
+let show_previous = false
 
 $(document).ready(function() {
     // Add generic content for all pages
     document.body.innerHTML+=`<h1>Metapontum ${currentSchedule} Schema <span id="date"></span> kl. <span id="time">00:00:00</span></h1><p>För tillfället använder vi namnen direkt från schoolsoft, men detta går att ändra om vi vill</p>`
-    document.body.innerHTML+='<h2 id="currentTitle"></h2><p id="current"></p><h2 id="laterTitle"></h2><p id="later"></p><h2 id="nextDayTitle"></h2><p id="nextDay"></p>'
-    document.body.innerHTML+='<h2>Stop är användbart för att kopiera text</h2><button id="start_scripts">Start</button><button id="stop_scripts">Stop</button>'
+    document.body.innerHTML+='<h2 id="previousTitle"></h2><p id="previous"></p><h2 id="currentTitle"></h2><p id="current"></p><h2 id="laterTitle"></h2><p id="later"></p><h2 id="nextDayTitle"></h2><p id="nextDay"></p>'
+    document.body.innerHTML+='<h2>Stop är användbart för att kopiera text</h2><button id="start_scripts">Start</button><button id="stop_scripts">Stop</button><br/><button id="toggle_previous">Visa Tidigare</button>'
     // Add callbacks to buttons
     $("#start_scripts").click(function(){run_scripts=true})
     $("#stop_scripts").click(function(){run_scripts=false})
+    $("#toggle_previous").click(function() {
+        show_previous = !show_previous
+        document.getElementById("toggle_previous").innerHTML = show_previous? "Dölj Tidigare": "Visa Tidigare"
+    })
 
     // Refresh all dynamic fields
     function render() {
@@ -58,30 +63,40 @@ function getToday(date) {
     const week = getThisWeek(date, currentSchedule);
     const lessons = week[date.getDay()-1]
 
-    let outStr = ""
-
-    // We don't want to show previous lessons because they aren't relevant
-    let _showPrevious = false
+    let outPrevious = ""
+    let outCurrent = ""
+    let outFuture = ""
 
     // Add all lessons to the output
     for (let i = 0; i < lessons.length; i++) {
-        // Extra case for the current lesson
-        if (lessons[i].isCurrent(date)) {
-            document.getElementById("currentTitle").innerHTML = "Just nu:"
-            document.getElementById("current").innerHTML += lessons[i].getString(date, _showPrevious)
+        if (lessons[i].endMilliseconds < getInMilliseconds(date)) {
+            outPrevious += lessons[i].getString(date, show_previous)
             continue
         }
 
-        // Generic lesson
-        outStr += lessons[i].getString(date, _showPrevious)
+        if (lessons[i].isCurrent(date)) {
+            outCurrent += lessons[i].getString(date, show_previous)
+            continue
+        }
+
+        outFuture += lessons[i].getString(date, show_previous)
     }
 
-    // If we added anything, add a title
-    if (outStr.length > 0) {
+    // If we added anything to a category, add a title
+    if (outPrevious.length > 0 && show_previous) {
+        document.getElementById("previousTitle").innerHTML = "Tidigare:"
+        document.getElementById("previous").innerHTML = outPrevious
+    }
+
+    if (outCurrent.length > 0) {
+        document.getElementById("currentTitle").innerHTML = "Just nu:"
+        document.getElementById("current").innerHTML = outCurrent
+    }
+
+    if (outFuture.length > 0) {
         document.getElementById("laterTitle").innerHTML = "Kommande:"
+        document.getElementById("later").innerHTML = outFuture 
     }
-
-    document.getElementById("later").innerHTML = outStr 
 }
 
 // Display the content for the next day
@@ -124,6 +139,8 @@ function getNextDay(date) {
 
 // Clear all fields to that they are ready for new content
 function clearFields() {
+    document.getElementById("previousTitle").innerHTML = ""
+    document.getElementById("previous").innerHTML = ""  
     document.getElementById("currentTitle").innerHTML = ""
     document.getElementById("current").innerHTML = ""
     document.getElementById("laterTitle").innerHTML = ""
