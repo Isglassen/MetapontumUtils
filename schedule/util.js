@@ -83,7 +83,7 @@ class ScheduleEntry {
         }
         if (getInMilliseconds(date) > this.endMilliseconds && includeAfter) {
             // Past lesson string (if we include lessons after they end)
-            return `<b>${this.getTitle()}</b> slutate <b>${toTimeString(getInMilliseconds(date) - this.endMilliseconds, Math.ceil, true)}</b> sedan<br>`
+            return `<b>${this.getTitle()}</b> slutate <b>${toTimeString(getInMilliseconds(date) - this.endMilliseconds, Math.floor, true)}</b> sedan<br>`
         }
         // We don't include the lesson
         return ""
