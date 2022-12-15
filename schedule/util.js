@@ -109,7 +109,7 @@ function createCookie(name, value, days) {
     }
 
     // Set the cookie string, which contains the name-value pair and any options for the cookie
-    var cookieString = name + "=" + encodedValue + expires + "; path=../../";
+    var cookieString = name + "=" + encodedValue + expires + "; path=/";
 
     // Use the 'document.cookie' property to set the cookie
     document.cookie = cookieString;
