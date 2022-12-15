@@ -8,4 +8,9 @@
 
 ## Planerat
 
- Filter i scheman så att man bara får upp sina egna lektioner
+- Filter i scheman så att man bara får upp sina egna lektioner
+
+### Kod (irellevant för användare)
+
+- Spara schemat i JSON (fetch("file").then())
+- Kanske importera automatiskt från schoolsoft (svårt)
