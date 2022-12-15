@@ -4,23 +4,28 @@ let testTime = null
 let run_scripts = true
 const previous_cookie = getCookie("show_previous")
 let show_previous = getCookie("show_previous") === "1"
-show_previous = show_previous === null? false: show_previous
 
 $(document).ready(function() {
     // Add generic content for all pages
     document.body.innerHTML+=`<h1>Metapontum ${currentSchedule} Schema <span id="date"></span> kl. <span id="time">00:00:00</span></h1><p>För tillfället använder vi namnen direkt från schoolsoft, men detta går att ändra om vi vill</p>`
     document.body.innerHTML+='<h2 id="previousTitle"></h2><p id="previous"></p><h2 id="currentTitle"></h2><p id="current"></p><h2 id="laterTitle"></h2><p id="later"></p><h2 id="nextDayTitle"></h2><p id="nextDay"></p>'
     document.body.innerHTML+='<h2>Stop är användbart för att kopiera text</h2><button id="start_scripts">Start</button><button id="stop_scripts">Stop</button><br/><button id="toggle_previous">Visa Tidigare</button>'
+    document.body.innerHTML+='<br/><br/>Inställningar är: <kbd>Visa Tidigare</kbd>, <kbd>Grupper (kommer snart)</kbd><br/><button id="cookie_save">Spara inställningar (cookies)</button><button id="cookie_remove">Glöm cookies</button>'
 
     createCookie("show_previous", +show_previous)
     document.getElementById("toggle_previous").innerHTML = show_previous? "Dölj Tidigare": "Visa Tidigare"
     // Add callbacks to buttons
-    $("#start_scripts").click(function(){run_scripts=true})
-    $("#stop_scripts").click(function(){run_scripts=false})
+    $("#start_scripts").click(function() {run_scripts=true})
+    $("#stop_scripts").click(function() {run_scripts=false})
     $("#toggle_previous").click(function() {
         show_previous = !show_previous
-        createCookie("show_previous", +show_previous)
         document.getElementById("toggle_previous").innerHTML = show_previous? "Dölj Tidigare": "Visa Tidigare"
+    })
+    $("#cookie_save").click(function() {
+        createCookie("show_previous", +show_previous)
+    })
+    $("#cookie_remove").click(function() {
+        createCookie("show_previous", null, -1)
     })
 
     // Refresh all dynamic fields

@@ -98,18 +98,18 @@ class ScheduleEntry {
 // Credit: https://chat.openai.com/chat
 function createCookie(name, value, days) {
     // Encode the value to make sure it doesn't contain any special characters
-    var encodedValue = encodeURIComponent(value);
-    var expires = ""
+    const encodedValue = encodeURIComponent(value);
+    let expires = ""
 
     // Create a date object that will be used to set the expiration date of the cookie
     if (days !== null) {
-        var date = new Date();
+        const date = new Date();
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        var expires = "; expires=" + date.toUTCString();
+        expires = "; expires=" + date.toUTCString();
     }
 
     // Set the cookie string, which contains the name-value pair and any options for the cookie
-    var cookieString = name + "=" + encodedValue + expires + "; path=/";
+    const cookieString = name + "=" + encodedValue + expires + "; path=/";
 
     // Use the 'document.cookie' property to set the cookie
     document.cookie = cookieString;
@@ -117,16 +117,16 @@ function createCookie(name, value, days) {
 
 function getCookie(name) {
     // Use the 'decodeURIComponent' function to decode the value of the cookie
-    var decodedCookie = decodeURIComponent(document.cookie);
+    const decodedCookie = decodeURIComponent(document.cookie);
 
     // Create an array of all the name-value pairs in the cookie
-    var pairs = decodedCookie.split(";");
+    const pairs = decodedCookie.split(";");
 
     // Loop through the name-value pairs and return the value for the specified cookie name
-    for (var i = 0; i < pairs.length; i++) {
-        var pair = pairs[i].split("=");
+    for (let i = 0; i < pairs.length; i++) {
+        const pair = pairs[i].split("=");
         if (pair[0].trim() == name) {
-        return pair[1];
+            return pair[1];
         }
     }
     return null;
