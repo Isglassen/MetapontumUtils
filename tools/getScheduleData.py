@@ -122,6 +122,6 @@ for day in output:
 outStr += "],"
 
 with jsonPath.open("w") as f:
-    f.write(json.dumps(output, indent=2))
+    f.write(json.dumps(output, indent=4))
 
 print("Remember to rename the groups and lessons so that they are more readable")
