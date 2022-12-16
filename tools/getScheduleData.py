@@ -17,7 +17,7 @@ for child in soup.tr.children:
     widths.append(int(child["colspan"]))
 
 rowSpans = []
-lessons: list[list[str]] = []
+lessons: list[list[dict[str, str]]] = []
 
 for i in widths:
     obj = []
@@ -30,7 +30,6 @@ for i in widths:
 
 row = 0
 for tr in soup.children:
-    #Skip possible newlines (because those exist...)
     try:
         for td in tr.children:
 
@@ -71,9 +70,18 @@ for tr in soup.children:
             if top: continue
             if "light" in td["class"]: continue
 
-            lessons[weekday].append(td.div["title"])
+            style = ""
+            try:
+                style = td["style"]
+
+            except:
+                # print("Object has no style")
+                pass
+
+            lessons[weekday].append({"info": td.div["title"], "style": style})
         row += 1
 
+    # Skip possible newlines (because those exist...)
     except Exception as err:
         if str(err) != "'NavigableString' object has no attribute 'children'": raise(err)
 
@@ -84,8 +92,9 @@ for day in lessons:
     dayData = []
     for lesson in day:
         outObj = []
-        header = lesson[lesson.index("header=[ ")+9:lesson.index(" body")-1]
-        body = lesson[lesson.index("body=[")+6:lesson.rindex("]")]
+        info = lesson["info"]
+        header = info[info.index("header=[ ")+9:info.index(" body")-1]
+        body = info[info.index("body=[")+6:info.rindex("]")]
         group = body[body.index("Grupp: ")+7:body.index("\\n", body.index("Grupp: ")+7)]
         name = header[header.index(" ")+1:]
         times = header[:header.index(" ")].split("-")
@@ -98,6 +107,7 @@ for day in lessons:
         outObj.append(int(startTimes[1])) # Start time minutes
         outObj.append(int(endTimes[0])) # End time hours 
         outObj.append(int(endTimes[1])) # End time minutes
+        outObj.append(lesson["style"]) # Colors for the lesson
         dayData.append(outObj)
     output.append(dayData)
     weekday += 1
@@ -108,7 +118,7 @@ outStr = "[\n"
 for day in output:
     outStr += indent+"[\n"
     for lesson in day:
-        outStr += 2*indent+"new ScheduleEntry(["+repr(lesson[0])+"], "+repr(lesson[1])+", "+repr(lesson[2])+", "+repr(lesson[3])+", "+repr(lesson[4])+", "+repr(lesson[5])+", "+repr(lesson[6])+"),\n"
+        outStr += 2*indent+"new ScheduleEntry(["+repr(lesson[0])+"], "+repr(lesson[1])+", "+repr(lesson[2])+", "+repr(lesson[3])+", "+repr(lesson[4])+", "+repr(lesson[5])+", "+repr(lesson[6])+", "+repr(lesson[7])+"),\n"
     outStr += indent+"],\n"
 outStr += "],"
 

@@ -24,12 +24,13 @@ function getInMilliseconds(date) {
 }
 
 class ScheduleEntry {
-    constructor(groups, name, weekday, startHour, startMinute, endHour, endMinute) {
+    constructor(groups, name, weekday, startHour, startMinute, endHour, endMinute, style) {
         this.groups = groups
         this.name = name
         this.weekday = weekday
         this.startMilliseconds = startHour*60*60*1000 + startMinute*60*1000
         this.endMilliseconds = endHour*60*60*1000 + endMinute*60*1000
+        this.styleData = style // The colors that should be used for the lesson, as html style tag data
     }
 
     // Checks if a studentss group list is in this lessons list

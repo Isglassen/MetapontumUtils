@@ -61,7 +61,7 @@ $(document).ready(function() {
 
     // First render
     render()
-    // Repeat every 0.5 seconds
+    // Repeat every 0.5 seconds (smaller number=more exact)
     setInterval(render, 500)
 })
 
