@@ -106,6 +106,9 @@ for day in lessons:
         outObj.append(int(startTimes[1])) # Start time minutes
         outObj.append(int(endTimes[0])) # End time hours 
         outObj.append(int(endTimes[1])) # End time minutes
+        style = lesson["style"]
+        if style == "":
+            style = "background-color:#ffffff; color:#000000"
         outObj.append(lesson["style"]) # Colors for the lesson
         dayData.append(outObj)
     output.append(dayData)

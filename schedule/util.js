@@ -71,15 +71,15 @@ class ScheduleEntry {
     getString(date, includeAfter) {
         if (this.isCurrent(date)) {
             // Current lesson string
-            return `<span style="${this.styleData}"><b>${this.getTitle()}</b> slutar om <b>${toTimeString(this.endMilliseconds - getInMilliseconds(date), Math.ceil, true)}</b><br></style>`
+            return `<span style="${this.styleData}"><b>${this.getTitle()}</b> slutar om <b>${toTimeString(this.endMilliseconds - getInMilliseconds(date), Math.ceil, true)}</b><br></span>`
         }
         if (getInMilliseconds(date) < this.startMilliseconds) {
             // Future lesson string
-            return `<span style="${this.styleData}"><b>${this.getTitle()}</b> börjar om <b>${toTimeString(this.startMilliseconds - getInMilliseconds(date), Math.ceil, true)}</b><br></style>`
+            return `<span style="${this.styleData}"><b>${this.getTitle()}</b> börjar om <b>${toTimeString(this.startMilliseconds - getInMilliseconds(date), Math.ceil, true)}</b><br></span>`
         }
         if (getInMilliseconds(date) > this.endMilliseconds && includeAfter) {
             // Past lesson string (if we include lessons after they end)
-            return `<span style="${this.styleData}"><b>${this.getTitle()}</b> slutate <b>${toTimeString(getInMilliseconds(date) - this.endMilliseconds, Math.floor, true)}</b> sedan<br></style>`
+            return `<span style="${this.styleData}"><b>${this.getTitle()}</b> slutate <b>${toTimeString(getInMilliseconds(date) - this.endMilliseconds, Math.floor, true)}</b> sedan<br></span>`
         }
         // We don't include the lesson
         return ""
@@ -87,7 +87,7 @@ class ScheduleEntry {
 
     // Get a string for when the lesson is, instead of in how long
     getTimeString() {
-        return `<span style="${this.styleData}"><b>${this.getTitle()}</b> kl. <b>${toTimeString(this.startMilliseconds, Math.floor, false)}</b><br></style>`
+        return `<span style="${this.styleData}"><b>${this.getTitle()}</b> kl. <b>${toTimeString(this.startMilliseconds, Math.floor, false)}</b><br></span>`
     }
 }
 

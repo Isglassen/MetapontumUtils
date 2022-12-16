@@ -80,7 +80,7 @@
                 30,
                 15,
                 30,
-                ""
+                "background-color:#ffffff; color:#000000"
             ],
             [
                 "Mspr Fra 9",
@@ -100,7 +100,7 @@
                 30,
                 15,
                 30,
-                ""
+                "background-color:#ffffff; color:#000000"
             ]
         ],
         [
@@ -132,7 +132,7 @@
                 40,
                 10,
                 30,
-                ""
+                "background-color:#ffffff; color:#000000"
             ],
             [
                 "Mspr Fra 9",
@@ -152,7 +152,7 @@
                 40,
                 10,
                 30,
-                ""
+                "background-color:#ffffff; color:#000000"
             ],
             [
                 "9B",
@@ -232,7 +232,7 @@
                 20,
                 16,
                 20,
-                ""
+                "background-color:#ffffff; color:#000000"
             ]
         ],
         [
@@ -344,7 +344,7 @@
                 30,
                 16,
                 30,
-                ""
+                "background-color:#ffffff; color:#000000"
             ]
         ],
         [
@@ -366,7 +366,7 @@
                 0,
                 9,
                 0,
-                ""
+                "background-color:#ffffff; color:#000000"
             ],
             [
                 "9B Y",
@@ -386,7 +386,7 @@
                 20,
                 10,
                 0,
-                ""
+                "background-color:#ffffff; color:#000000"
             ],
             [
                 "Mspr Ty 9",
@@ -396,7 +396,7 @@
                 5,
                 10,
                 45,
-                ""
+                "background-color:#ffffff; color:#000000"
             ],
             [
                 "Mspr Spa 9",
@@ -426,7 +426,7 @@
                 5,
                 10,
                 45,
-                ""
+                "background-color:#ffffff; color:#000000"
             ],
             [
                 "9B",
@@ -486,7 +486,7 @@
                 20,
                 16,
                 0,
-                ""
+                "background-color:#ffffff; color:#000000"
             ]
         ],
         []
