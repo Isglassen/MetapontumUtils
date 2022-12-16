@@ -7,7 +7,7 @@ let show_previous = getCookie("show_previous") === "1"
 
 $(document).ready(function() {
     // Add generic content for all pages
-    document.body.innerHTML+=`<h1>Metapontum ${currentSchedule} Schema <span id="date"></span> kl. <span id="time">00:00:00</span></h1><p>För tillfället använder vi namnen direkt från schoolsoft, men detta går att ändra om vi vill</p>`
+    document.body.innerHTML+='<h1>Metapontum <span id="scheduleName"></span> Schema <span id="date"></span> kl. <span id="time">00:00:00</span></h1><p>För tillfället använder vi namnen direkt från schoolsoft, men detta går att ändra om vi vill</p>'
     document.body.innerHTML+='<h2 id="previousTitle"></h2><p id="previous"></p><h2 id="currentTitle"></h2><p id="current"></p><h2 id="laterTitle"></h2><p id="later"></p><h2 id="nextDayTitle"></h2><p id="nextDay"></p>'
     document.body.innerHTML+='<h2>Stop är användbart för att kopiera text</h2><button id="start_scripts">Start</button><button id="stop_scripts">Stop</button><br/><button id="toggle_previous">Visa Tidigare</button>'
     document.body.innerHTML+='<br/><br/>Inställningar är: <kbd>Visa Tidigare</kbd>, <kbd>Grupper (kommer snart)</kbd><br/><button id="cookie_save">Spara inställningar (cookies)</button><button id="cookie_remove">Glöm cookies</button>'
@@ -35,6 +35,13 @@ $(document).ready(function() {
         if (!run_scripts) return
 
         clearFields()
+
+        document.getElementById("scheduleName").innerHTML = currentSchedule
+
+        if (loading) {
+            document.getElementById("current").innerHTML = "<kbd>Loading...</kbd>"
+            return
+        }
 
         let now = new Date()
         // For using a custom times instead of current time (testing)
@@ -140,7 +147,7 @@ function getNextDay(date) {
     // If we did output anything, add a title
     if (outStr.length > 0) {
         // Get the date 
-        let nextDate = week == "thisWeek"? new Date(lastWeekSeperator): new Date(weekSeperator)
+        let nextDate = week == "thisWeek"? new Date(seperators.lastWekk): new Date(seperators.thisWeek)
         nextDate.setDate(nextDate.getDate() + weekday-1)
 
         // Set the title to `${weekday} {date}/{month}`

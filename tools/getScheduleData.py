@@ -4,7 +4,6 @@ import json
 
 readPath = Path(__file__).parent / "htmlData.html"
 jsonPath = Path(__file__).parent / "scheduleJSON.json"
-writePath = Path(__file__).parent / "outSource.js"
 
 with readPath.open("r") as f:
     soup = BeautifulSoup(f, features="html.parser").tbody
@@ -124,8 +123,5 @@ outStr += "],"
 
 with jsonPath.open("w") as f:
     f.write(json.dumps(output, indent=2))
-
-with writePath.open("w") as f:
-    f.write(outStr)
 
 print("Remember to rename the groups and lessons so that they are more readable")

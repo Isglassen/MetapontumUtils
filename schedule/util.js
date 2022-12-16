@@ -18,11 +18,6 @@ function toTimeString(milliseconds, secondsFunction = Math.floor, showSeconds = 
     return `${stringMinLen2(h)}:${stringMinLen2(m)}${showSeconds? (":"+stringMinLen2(s)): ""}`
 }
 
-// Get epoch since the start of the dates current day
-function getInMilliseconds(date) {
-    return date.getHours()*60*60*1000 + date.getMinutes()*60*1000 + date.getSeconds()*1000 + date.getMilliseconds()
-}
-
 class ScheduleEntry {
     constructor(groups, name, weekday, startHour, startMinute, endHour, endMinute, style) {
         this.groups = groups
@@ -94,6 +89,112 @@ class ScheduleEntry {
     getTimeString() {
         return `<b>${this.getTitle()}</b> kl. <b>${toTimeString(this.startMilliseconds, Math.floor, false)}</b><br>`
     }
+}
+
+let loading = 2
+
+const seperators = {}
+fetch("../date.json")
+    .then(response => response.json())
+    .then(data => {
+        let entries = Object.entries(data)
+        for (let i=0; i<entries.length; i++) {
+            let key = entries[i][0]
+            let value = entries[i][1]
+            seperators[key] = new Date(value[0], value[1], value[2])
+        }
+        loading--
+    })
+let currentSchedule = ""
+const schedule = {thisWeek: [[new ScheduleEntry([],"",1,1,1,1,1,"")]], nextWeek: [[new ScheduleEntry([],"",1,1,1,1,1,"")]]}
+fetch("schedule.json")
+    .then(response => response.json())
+    .then(data => {
+        currentSchedule = data.name
+        let thisWeek = data.thisWeek
+        for (let i=0; i<thisWeek.length; i++){
+            let day = thisWeek[i]
+            schedule.thisWeek[i] = []
+            for (let j=0; j<day.length; j++){
+                let lesson = day[j]
+                schedule.thisWeek[i][j] = new ScheduleEntry(lesson[0], lesson[1], lesson[2], lesson[3], lesson[4], lesson[5], lesson[6], lesson[7])
+            }
+        }
+        let nextWeek = data.nextWeek
+        for (let i=0; i<nextWeek.length; i++){
+            let day = nextWeek[i]
+            schedule.nextWeek[i] = []
+            for (let j=0; j<day.length; j++){
+                let lesson = day[j]
+                schedule.nextWeek[i][j] = new ScheduleEntry(lesson[0], lesson[1], lesson[2], lesson[3], lesson[4], lesson[5], lesson[6], lesson[7])
+            }
+        }
+        loading--
+    })
+
+// Get epoch since the start of the dates current day
+function getInMilliseconds(date) {
+    return date.getHours()*60*60*1000 + date.getMinutes()*60*1000 + date.getSeconds()*1000 + date.getMilliseconds()
+}
+
+function getThisWeek(date) {
+    // TODO: Add a case for if it's past the next week
+    // If the date's time is past the weekSeperator, return the next week
+    if (date.getTime() - seperators.thisWeek.getTime()>0) return schedule.nextWeek;
+    // Otherwise return the current week
+    return schedule.thisWeek
+}
+
+function getNextDayWeek(date) {
+    // Initialise variables for the start of counting
+    let week = ""
+    let weekday = 0
+
+    // If it's before this week, the next day is monday this week
+    if (seperators.lastWeek.getTime() - date.getTime()>0) {
+        week = "thisWeek"
+        weekday = 1
+    }
+    // If it's the next week
+    else if (seperators.thisWeek.getTime() - date.getTime()<0) {
+        // TODO: Add a case for if it's past the next week
+        // If it's a weekend, we have no next day
+        if (date.getDay() == 0 || date.getDay() > 4) {
+            console.log("No day")
+            return ["",0,[]]
+        }
+        // Otherwise simply start at the next day
+        week = "nextWeek"
+        weekday = date.getDay() + 1
+    }
+    // If it's the current week, but the weekend, set the next week
+    else if (date.getDay() == 0 || date.getDay() > 4) {
+        week = "nextWeek"
+        weekday = 1
+    }
+    // Otherwise simply use next day
+    else {
+        week = "thisWeek"
+        weekday = date.getDay() + 1
+    }
+
+    // Loop through every day from the previously set day until we find one with lessons
+    while (schedule[week][weekday-1].length === 0) {
+        weekday++
+        // If the next day is a weekend this week, start on next week
+        if (weekday>5 && week === "thisWeek") {
+            weekday = 1
+            week = "nextWeek"
+        }
+        // If the next day is a weekend next week, we don't have any lessons to display
+        if (weekday>5 && week === "nextWeek") {
+            console.log("Nothing in day")
+            return ["",0,[]]
+        }
+    }
+
+    // Return week, weekday, schedule
+    return [week, weekday, schedule[week][weekday-1]]
 }
 
 // Credit: https://chat.openai.com/chat
