@@ -6,3 +6,15 @@ body {
     width: fit-content;
     border: 1px solid black;
 }
+
+group-option {
+    user-select: none;
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+}
+
+group-option[data-selected="1"] {
+    background-color: white;
+    color: black;
+}

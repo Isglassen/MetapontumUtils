@@ -4,15 +4,20 @@ let testTime = null
 let run_scripts = true
 const previous_cookie = getCookie("show_previous")
 let show_previous = getCookie("show_previous") === "1"
+let groups = JSON.parse(getCookie("student_groups"))
+if (groups === null) groups = []
+let loaded = false
 
 $(document).ready(function() {
     // Add generic content for all pages
+    document.head.innerHTML+='<link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico"><link rel="stylesheet" href="../style.css">'
+
     document.body.innerHTML+='<h1>Metapontum <span id="scheduleName"></span> Schema <span id="date"></span> kl. <span id="time">00:00:00</span></h1><p>För tillfället använder vi namnen direkt från schoolsoft, men detta går att ändra om vi vill</p>'
     document.body.innerHTML+='<h2 id="previousTitle"></h2><p class="lessons" id="previous"></p><h2 id="currentTitle"></h2><p class="lessons" id="current"></p><h2 id="laterTitle"></h2><p class="lessons" id="later"></p><h2 id="nextDayTitle"></h2><p class="lessons" id="nextDay"></p>'
     document.body.innerHTML+='<h2>Stop är användbart för att kopiera text</h2><button id="start_scripts">Start</button><button id="stop_scripts">Stop</button><br/><button id="toggle_previous">Visa Tidigare</button>'
-    document.body.innerHTML+='<br/><br/>Inställningar är: <kbd>Visa Tidigare</kbd>, <kbd>Grupper (kommer snart)</kbd><br/><button id="cookie_save">Spara inställningar (cookies)</button><button id="cookie_remove">Glöm cookies</button>'
+    document.body.innerHTML+='<br/><p>Grupper: </p><div id="group_select"></div>'
+    document.body.innerHTML+='<br/><br/>Inställningar är: <kbd>Visa Tidigare</kbd>, <kbd>Grupper</kbd><br/><button id="cookie_save">Spara inställningar (cookies)</button><button id="cookie_remove">Glöm cookies</button>'
 
-    createCookie("show_previous", +show_previous)
     document.getElementById("toggle_previous").innerHTML = show_previous? "Dölj Tidigare": "Visa Tidigare"
     // Add callbacks to buttons
     $("#start_scripts").click(function() {run_scripts=true})
@@ -23,10 +28,48 @@ $(document).ready(function() {
     })
     $("#cookie_save").click(function() {
         createCookie("show_previous", +show_previous)
+        createCookie("student_groups", JSON.stringify(groups))
     })
     $("#cookie_remove").click(function() {
         createCookie("show_previous", null, -1)
+        createCookie("student_groups", null, -1)
     })
+
+    function afterLoad() {
+        document.getElementById("scheduleName").innerHTML = currentSchedule
+        addGroup(groups, currentSchedule)
+        document.head.innerHTML+=`<title>${currentSchedule} Schema</title>`
+        groupSelectStr = ""
+        for (let i=0; i<allGroups.length; i++) {
+            group = allGroups[i]
+            groupSelectStr += `<br/><group-option data-name="${group}"`
+            if (groups.includes(group)) groupSelectStr += ' data-selected="1"'
+            groupSelectStr += `>${group}</group-option>`
+        }
+        document.getElementById("group_select").innerHTML += groupSelectStr
+        options = document.getElementsByTagName("group-option")
+        for (let i=0; i<options.length; i++) {
+            $(options[i]).click(function(e) {
+                let target = e.delegateTarget
+                console.log(groups)
+                console.log(target.dataset.selected)
+                console.log(target.dataset.name)
+                if (!("selected" in target.dataset)) {
+                    target.dataset.selected = "1"
+                    addGroup(groups, target.dataset.name)
+                    return
+                }
+                if (target.dataset.selected == "1") {
+                    target.dataset.selected = "0"
+                    removeGroup(groups, target.dataset.name)
+                    return
+                }
+                target.dataset.selected = "1"
+                addGroup(groups, target.dataset.name)
+            })
+        }
+        loaded = true
+    }
 
     // Refresh all dynamic fields
     function render() {
@@ -36,12 +79,12 @@ $(document).ready(function() {
 
         clearFields()
 
-        document.getElementById("scheduleName").innerHTML = currentSchedule
-
         if (loading) {
             document.getElementById("current").innerHTML = "<kbd>Loading...</kbd>"
             return
         }
+
+        if (!loaded) afterLoad()
 
         let now = new Date()
         // For using a custom times instead of current time (testing)
@@ -87,17 +130,19 @@ function getToday(date) {
 
     // Add all lessons to the output
     for (let i = 0; i < lessons.length; i++) {
+        if (!lessons[i].studentHas(groups)) continue
+
         if (lessons[i].endMilliseconds < getInMilliseconds(date)) {
-            outPrevious += lessons[i].getString(date, show_previous)
+            outPrevious += lessons[i].getString(date, show_previous, [currentSchedule])
             continue
         }
 
         if (lessons[i].isCurrent(date)) {
-            outCurrent += lessons[i].getString(date, show_previous)
+            outCurrent += lessons[i].getString(date, show_previous, [currentSchedule])
             continue
         }
 
-        outFuture += lessons[i].getString(date, show_previous)
+        outFuture += lessons[i].getString(date, show_previous, [currentSchedule])
     }
 
     // If we added anything to a category, add a title
@@ -140,7 +185,9 @@ function getNextDay(date) {
 
     // Add all lessons to the output
     for (let i = 0; i < lessons.length; i++) {
-        outStr += lessons[i].getTimeString()
+        if (!lessons[i].studentHas(groups)) continue
+
+        outStr += lessons[i].getTimeString([currentSchedule])
     }
     document.getElementById("nextDay").innerHTML = outStr
 

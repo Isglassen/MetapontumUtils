@@ -8,8 +8,7 @@
 
 ## Planerat
 
-- Filter i scheman så att man bara får upp sina egna lektioner
-- Färg på lektioner
+Ingenting är planerat just nu, så ge gärna förslag
 
 ### Kod (irellevant för användare)
 

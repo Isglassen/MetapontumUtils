@@ -36,9 +36,7 @@ class ScheduleEntry {
         // Simple loop of check every item in groups for each this.groups
         // return true if anything matches
         for (let i=0; i<this.groups.length; i++) {
-            for (let i2=0; i2<groups.length; i2++) {
-                if (groups[i2] == this.groups[i]) return true
-            }
+            if (groups.includes(this.groups[i])) return true
         }
 
         return false
@@ -46,9 +44,16 @@ class ScheduleEntry {
 
     // Get the lessons title
     // TODO: Exclude field to maybe not include the obvious 9A/9B for every lesson
-    getTitle() {
-        if (this.groups.length == 0) return this.name
-        return `[${this.groups.join(",")}]: ${this.name}`
+    getTitle(excludeGroups) {
+
+        let showGroups = []
+        for (let i=0; i<this.groups.length; i++) { 
+            if (Array.isArray(excludeGroups) && excludeGroups.includes(this.groups[i])) continue
+            showGroups.push(this.groups[i])
+        }
+
+        if (showGroups.length == 0) return this.name
+        return `[${showGroups.join(",")}]: ${this.name}`
     }
 
     /**
@@ -68,30 +73,44 @@ class ScheduleEntry {
     }
 
     // Get the string for this lesson
-    getString(date, includeAfter) {
+    getString(date, includeAfter, excludeGroups) {
         if (this.isCurrent(date)) {
             // Current lesson string
-            return `<span style="${this.styleData}"><b>${this.getTitle()}</b> slutar om <b>${toTimeString(this.endMilliseconds - getInMilliseconds(date), Math.ceil, true)}</b><br></span>`
+            return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> slutar om <b>${toTimeString(this.endMilliseconds - getInMilliseconds(date), Math.ceil, true)}</b><br></span>`
         }
         if (getInMilliseconds(date) < this.startMilliseconds) {
             // Future lesson string
-            return `<span style="${this.styleData}"><b>${this.getTitle()}</b> börjar om <b>${toTimeString(this.startMilliseconds - getInMilliseconds(date), Math.ceil, true)}</b><br></span>`
+            return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> börjar om <b>${toTimeString(this.startMilliseconds - getInMilliseconds(date), Math.ceil, true)}</b><br></span>`
         }
         if (getInMilliseconds(date) > this.endMilliseconds && includeAfter) {
             // Past lesson string (if we include lessons after they end)
-            return `<span style="${this.styleData}"><b>${this.getTitle()}</b> slutate <b>${toTimeString(getInMilliseconds(date) - this.endMilliseconds, Math.floor, true)}</b> sedan<br></span>`
+            return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> slutate <b>${toTimeString(getInMilliseconds(date) - this.endMilliseconds, Math.floor, true)}</b> sedan<br></span>`
         }
         // We don't include the lesson
         return ""
     }
 
     // Get a string for when the lesson is, instead of in how long
-    getTimeString() {
-        return `<span style="${this.styleData}"><b>${this.getTitle()}</b> kl. <b>${toTimeString(this.startMilliseconds, Math.floor, false)}</b><br></span>`
+    getTimeString(excludeGroups) {
+        return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> kl. <b>${toTimeString(this.startMilliseconds, Math.floor, false)}</b><br></span>`
     }
 }
 
-let loading = 2
+let allGroups = []
+
+function addGroup(groupList, group) {
+    if (!groupList.includes(group)) {
+        groupList.push(group)
+    }
+}
+
+function removeGroup(groupList, group) {
+    if (groupList.includes(group)) {
+        groupList.splice(groupList.indexOf(group), 1)
+    }
+}
+
+let loading = 3
 
 const seperators = {}
 fetch("../date.json")
@@ -105,30 +124,45 @@ fetch("../date.json")
         }
         loading--
     })
+
+fetch("../groups.json")
+    .then(response => response.json())
+    .then(data => {
+        for (let i=0; i< data.length; i++) {
+            addGroup(allGroups, data[i])
+        }
+        loading--
+    })
+
+/**
+ * @type {{thisWeek: ScheduleEntry[][], nextWeek: ScheduleEntry[][]}}
+ */
+const schedule = {thisWeek: [], nextWeek: []}
 let currentSchedule = ""
-const schedule = {thisWeek: [[new ScheduleEntry([],"",1,1,1,1,1,"")]], nextWeek: [[new ScheduleEntry([],"",1,1,1,1,1,"")]]}
 fetch("schedule.json")
     .then(response => response.json())
     .then(data => {
+        function addWeek(scheduleWeek, weekData) {
+            for (let i=0; i<weekData.length; i++){
+                let day = weekData[i]
+                scheduleWeek[i] = []
+                for (let j=0; j<day.length; j++){
+                    let lesson = day[j]
+                    scheduleWeek[i][j] = new ScheduleEntry(lesson[0], lesson[1], lesson[2], lesson[3], lesson[4], lesson[5], lesson[6], lesson[7])
+                    for (let group=0; group<scheduleWeek[i][j].groups.length; group++) {
+                        addGroup(allGroups, scheduleWeek[i][j].groups[group])
+                    }
+                }
+            }
+        }
+
         currentSchedule = data.name
         let thisWeek = data.thisWeek
-        for (let i=0; i<thisWeek.length; i++){
-            let day = thisWeek[i]
-            schedule.thisWeek[i] = []
-            for (let j=0; j<day.length; j++){
-                let lesson = day[j]
-                schedule.thisWeek[i][j] = new ScheduleEntry(lesson[0], lesson[1], lesson[2], lesson[3], lesson[4], lesson[5], lesson[6], lesson[7])
-            }
-        }
         let nextWeek = data.nextWeek
-        for (let i=0; i<nextWeek.length; i++){
-            let day = nextWeek[i]
-            schedule.nextWeek[i] = []
-            for (let j=0; j<day.length; j++){
-                let lesson = day[j]
-                schedule.nextWeek[i][j] = new ScheduleEntry(lesson[0], lesson[1], lesson[2], lesson[3], lesson[4], lesson[5], lesson[6], lesson[7])
-            }
-        }
+        
+        addWeek(schedule.thisWeek, thisWeek)
+        addWeek(schedule.nextWeek, nextWeek)
+
         loading--
     })
 
