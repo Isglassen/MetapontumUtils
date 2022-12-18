@@ -18,3 +18,21 @@ group-option[data-selected="1"] {
     background-color: white;
     color: black;
 }
+
+#currentTitle {
+    font-size: xx-large;
+}
+
+#current {
+    font-size: x-large;
+}
+
+/* For the class select, should be removed soon */
+div:has(button.link-button) {
+    width: fit-content;
+}
+
+button.link-button {
+    background-color: white;
+    font-size: xx-large;
+}
