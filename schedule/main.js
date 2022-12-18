@@ -10,7 +10,7 @@ let loaded = false
 
 $(document).ready(function() {
     // Add generic content for all pages
-    document.head.innerHTML+='<link rel="icon" type="image/x-icon" href="../../assets/images/favicon.ico"><link rel="stylesheet" href="../style.css">'
+    document.head.innerHTML+='<link rel="stylesheet" href="../style.css">'
 
     document.body.innerHTML+='<h1>Metapontum <span id="scheduleName"></span> Schema <span id="date"></span> kl. <span id="time">00:00:00</span></h1><p>För tillfället använder vi namnen direkt från schoolsoft, men detta går att ändra om vi vill</p>'
     document.body.innerHTML+='<h2 id="previousTitle"></h2><p class="lessons" id="previous"></p><h2 id="currentTitle"></h2><p class="lessons" id="current"></p><h2 id="laterTitle"></h2><p class="lessons" id="later"></p><h2 id="nextDayTitle"></h2><p class="lessons" id="nextDay"></p>'
