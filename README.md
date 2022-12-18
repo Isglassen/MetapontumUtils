@@ -8,7 +8,7 @@
 
 ## Planerat
 
-Ingenting är planerat just nu, så ge gärna förslag
+- Kombinera alla scheman till 1 länk
 
 ### Kod (irellevant för användare)
 
