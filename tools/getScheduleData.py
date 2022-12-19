@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from pathlib import Path
+from jsonUtil import NoIndent, MyEncoder
 import json
 
 readPath = Path(__file__).parent / "htmlData.html"
@@ -110,21 +111,23 @@ for day in lessons:
         if style == "":
             style = "background-color:#ffffff; color:#000000"
         outObj.append(lesson["style"]) # Colors for the lesson
-        dayData.append(outObj)
+        dayData.append(NoIndent(outObj))
     output.append(dayData)
     weekday += 1
 
-# Convert this to a string for output
+# Convert this to a string for output into js (unused)
 indent = "    "
 outStr = "[\n"
 for day in output:
     outStr += indent+"[\n"
     for lesson in day:
+        lesson = lesson.value
         outStr += 2*indent+"new ScheduleEntry(["+repr(lesson[0])+"], "+repr(lesson[1])+", "+repr(lesson[2])+", "+repr(lesson[3])+", "+repr(lesson[4])+", "+repr(lesson[5])+", "+repr(lesson[6])+", "+repr(lesson[7])+"),\n"
     outStr += indent+"],\n"
 outStr += "],"
 
+# Save json
 with jsonPath.open("w") as f:
-    f.write(json.dumps(output, indent=4))
+    f.write(json.dumps(output, cls=MyEncoder, indent=4))
 
 print("Remember to rename the groups and lessons so that they are more readable")
