@@ -198,7 +198,7 @@ function getNextDay(date) {
         nextDate.setDate(nextDate.getDate() + weekday-1)
 
         // Set the title to `${weekday} {date}/{month}`
-        document.getElementById("nextDayTitle").innerHTML = days[weekday]+" "+nextDate.getDate()+"/"+(nextDate.getMonth()+1)
+        document.getElementById("nextDayTitle").innerHTML = days[weekday]+" "+nextDate.getDate()+"/"+(nextDate.getMonth()+1)+"/"+nextDate.getFullYear()
     }
 }
 
