@@ -13,3 +13,7 @@
 ### Kod (irellevant för användare)
 
 - Kanske importera automatiskt från schoolsoft (svårt)
+
+## If you want to contribute
+
+Even those who speak english can contribute, and should check out [the contributing guide](CONTRIBUTING.md) for more details
