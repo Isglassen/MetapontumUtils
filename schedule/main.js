@@ -22,19 +22,19 @@ $(document).ready(function() {
     document.getElementById("toggle_previous").innerHTML = show_previous? "Dölj Tidigare": "Visa Tidigare"
 
     // Add callbacks to buttons
-    $("#toggle_scripts").click(function() {
+    $("#toggle_scripts").click(() => {
         run_scripts=!run_scripts
         document.getElementById("toggle_scripts").innerHTML = run_scripts? "Stoppa Script": "Starta Script"
     })
-    $("#toggle_previous").click(function() {
+    $("#toggle_previous").click(() => {
         show_previous = !show_previous
         document.getElementById("toggle_previous").innerHTML = show_previous? "Dölj Tidigare": "Visa Tidigare"
     })
-    $("#cookie_save").click(function() {
+    $("#cookie_save").click(() => {
         createCookie("show_previous", +show_previous)
         createCookie("student_groups", JSON.stringify(groups))
     })
-    $("#cookie_remove").click(function() {
+    $("#cookie_remove").click(() => {
         createCookie("show_previous", null, -1)
         createCookie("student_groups", null, -1)
     })
