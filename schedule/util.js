@@ -96,8 +96,6 @@ class ScheduleEntry {
     }
 }
 
-let allGroups = []
-
 function addGroup(groupList, group) {
     if (!groupList.includes(group)) {
         groupList.push(group)
@@ -110,61 +108,11 @@ function removeGroup(groupList, group) {
     }
 }
 
-let loading = 3
-
-const seperators = {}
-fetch("../date.json")
-    .then(response => response.json())
-    .then(data => {
-        let entries = Object.entries(data)
-        for (let i=0; i<entries.length; i++) {
-            let key = entries[i][0]
-            let value = entries[i][1]
-            seperators[key] = new Date(value[0], value[1], value[2])
-        }
-        loading--
-    })
-
-fetch("../groups.json")
-    .then(response => response.json())
-    .then(data => {
-        for (let i=0; i< data.length; i++) {
-            addGroup(allGroups, data[i])
-        }
-        loading--
-    })
-
-/**
- * @type {{thisWeek: ScheduleEntry[][], nextWeek: ScheduleEntry[][]}}
- */
-const schedule = {thisWeek: [], nextWeek: []}
-let currentSchedule = ""
-fetch("schedule.json")
-    .then(response => response.json())
-    .then(data => {
-        function addWeek(scheduleWeek, weekData) {
-            for (let i=0; i<weekData.length; i++){
-                let day = weekData[i]
-                scheduleWeek[i] = []
-                for (let j=0; j<day.length; j++){
-                    let lesson = day[j]
-                    scheduleWeek[i][j] = new ScheduleEntry(lesson[0], lesson[1], lesson[2], lesson[3], lesson[4], lesson[5], lesson[6], lesson[7])
-                    for (let group=0; group<scheduleWeek[i][j].groups.length; group++) {
-                        addGroup(allGroups, scheduleWeek[i][j].groups[group])
-                    }
-                }
-            }
-        }
-
-        currentSchedule = data.name
-        let thisWeek = data.thisWeek
-        let nextWeek = data.nextWeek
-        
-        addWeek(schedule.thisWeek, thisWeek)
-        addWeek(schedule.nextWeek, nextWeek)
-
-        loading--
-    })
+function getLessonDate(week, weekday) {
+    let date = week == "thisWeek"? new Date(seperators.lastWeek): new Date(seperators.thisWeek)
+    date.setDate(date.getDate() + weekday-1)
+    return date
+}
 
 // Get epoch since the start of the dates current day
 function getInMilliseconds(date) {
@@ -192,8 +140,8 @@ function getNextDayWeek(date) {
     // If it's the next week
     else if (seperators.thisWeek.getTime() - date.getTime()<0) {
         // TODO: Add a case for if it's past the next week
-        // If it's a weekend, we have no next day
-        if (date.getDay() == 0 || date.getDay() > 4) {
+        // If it's a sunday, we have no next day
+        if (date.getDay() == 0) {
             console.log("No day")
             return ["",0,[]]
         }
@@ -201,8 +149,8 @@ function getNextDayWeek(date) {
         week = "nextWeek"
         weekday = date.getDay() + 1
     }
-    // If it's the current week, but the weekend, set the next week
-    else if (date.getDay() == 0 || date.getDay() > 4) {
+    // If it's the current week, but a sunday, set the next week
+    else if (date.getDay() == 0) {
         week = "nextWeek"
         weekday = 1
     }
@@ -214,17 +162,16 @@ function getNextDayWeek(date) {
 
     // Loop through every day from the previously set day until we find one with lessons
     while (schedule[week][weekday-1].length === 0) {
+        // Increase the week if it's a sunday
+        if (weekday == 0) {
+            // There is no next day
+            if (week === "nextWeek") return ["",0,[]]
+            week = "nextWeek" // Increase week
+        }
+
         weekday++
-        // If the next day is a weekend this week, start on next week
-        if (weekday>5 && week === "thisWeek") {
-            weekday = 1
-            week = "nextWeek"
-        }
-        // If the next day is a weekend next week, we don't have any lessons to display
-        if (weekday>5 && week === "nextWeek") {
-            console.log("Nothing in day")
-            return ["",0,[]]
-        }
+        // Sunday is 0
+        if (weekday>6) weekday = 0
     }
 
     // Return week, weekday, schedule

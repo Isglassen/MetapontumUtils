@@ -14,14 +14,18 @@ $(document).ready(function() {
 
     document.body.innerHTML+='<h1>Metapontum <span id="scheduleName"></span> Schema <span id="date"></span> kl. <span id="time">00:00:00</span></h1><p>För tillfället använder vi namnen direkt från schoolsoft, men detta går att ändra om vi vill</p>'
     document.body.innerHTML+='<h2 id="previousTitle"></h2><p class="lessons" id="previous"></p><h2 id="currentTitle"></h2><p class="lessons" id="current"></p><h2 id="laterTitle"></h2><p class="lessons" id="later"></p><h2 id="nextDayTitle"></h2><p class="lessons" id="nextDay"></p>'
-    document.body.innerHTML+='<h2>Stop är användbart för att kopiera text</h2><button id="start_scripts">Start</button><button id="stop_scripts">Stop</button><br/><button id="toggle_previous">Visa Tidigare</button>'
+    document.body.innerHTML+='<h2><kbd>Stoppa Script</kbd> är användbart för att kopiera text</h2><button id="toggle_scripts">Stoppa Script</button><button id="toggle_previous">Visa Tidigare</button>'
     document.body.innerHTML+='<br/><p>Grupper: </p><div id="group_select"></div>'
     document.body.innerHTML+='<br/><br/>Inställningar är: <kbd>Visa Tidigare</kbd>, <kbd>Grupper</kbd><br/><button id="cookie_save">Spara inställningar (cookies)</button><button id="cookie_remove">Glöm cookies</button>'
 
+    // Set button names
     document.getElementById("toggle_previous").innerHTML = show_previous? "Dölj Tidigare": "Visa Tidigare"
+
     // Add callbacks to buttons
-    $("#start_scripts").click(function() {run_scripts=true})
-    $("#stop_scripts").click(function() {run_scripts=false})
+    $("#toggle_scripts").click(function() {
+        run_scripts=!run_scripts
+        document.getElementById("toggle_scripts").innerHTML = run_scripts? "Stoppa Script": "Starta Script"
+    })
     $("#toggle_previous").click(function() {
         show_previous = !show_previous
         document.getElementById("toggle_previous").innerHTML = show_previous? "Dölj Tidigare": "Visa Tidigare"
@@ -51,9 +55,6 @@ $(document).ready(function() {
         for (let i=0; i<options.length; i++) {
             $(options[i]).click(function(e) {
                 let target = e.delegateTarget
-                console.log(groups)
-                console.log(target.dataset.selected)
-                console.log(target.dataset.name)
                 if (!("selected" in target.dataset)) {
                     target.dataset.selected = "1"
                     addGroup(groups, target.dataset.name)
@@ -117,9 +118,6 @@ $(document).ready(function() {
 
 // Display the content for today
 function getToday(date) {
-    // If it's not a school day we dont have a schedule to try and show
-    if (date.getDay()-1 < 0 || date.getDay()-1>4) return
-
     // Get lessons for this week
     const week = getThisWeek(date, currentSchedule);
     const lessons = week[date.getDay()-1]
@@ -193,9 +191,8 @@ function getNextDay(date) {
 
     // If we did output anything, add a title
     if (outStr.length > 0) {
-        // Get the date 
-        let nextDate = week == "thisWeek"? new Date(seperators.lastWeek): new Date(seperators.thisWeek)
-        nextDate.setDate(nextDate.getDate() + weekday-1)
+        // Get the date
+        nextDate = getLessonDate(week, weekday)
 
         // Set the title to `${weekday} {date}/{month}`
         document.getElementById("nextDayTitle").innerHTML = days[weekday]+" "+nextDate.getDate()+"/"+(nextDate.getMonth()+1)+"/"+nextDate.getFullYear()
