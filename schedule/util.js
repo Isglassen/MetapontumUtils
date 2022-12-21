@@ -8,23 +8,31 @@
  */
 function toTimeString(milliseconds, secondsFunction = Math.floor, showSeconds = true) {
     const seconds = secondsFunction(milliseconds/1000)
-    const h = Math.floor(seconds/(60*60))
-    const m = Math.floor((seconds-(h*60*60))/(60))
-    const s = (seconds-(h*60*60)-(m*60))
-    
+    const d = Math.floor(seconds/(24*60*60))
+    const h = Math.floor((seconds/(60*60))-(d*24))
+    const m = Math.floor((seconds/60)-(d*24*60)-(h*60))
+    const s = seconds-(d*24*60*60)-(h*60*60)-(m*60)
+        
     // Adds a leading zero to numbers of 1 length
     function stringMinLen2(num) { return num.toString().length == 1? "0"+num: num.toString() }
 
-    return `${stringMinLen2(h)}:${stringMinLen2(m)}${showSeconds? (":"+stringMinLen2(s)): ""}`
+    return `${d!==0?stringMinLen2(d)+":":""}${stringMinLen2(h)}:${stringMinLen2(m)}${showSeconds? (":"+stringMinLen2(s)): ""}`
 }
 
 class ScheduleEntry {
-    constructor(groups, name, weekday, startHour, startMinute, endHour, endMinute, style) {
+    constructor(groups, name, weekday, startHour, startMinute, endHour, endMinute, style, week) {
         this.groups = Array.isArray(groups)? groups: [groups]
         this.name = name
         this.weekday = weekday
-        this.startMilliseconds = startHour*60*60*1000 + startMinute*60*1000
-        this.endMilliseconds = endHour*60*60*1000 + endMinute*60*1000
+        this.week = week
+        let startDate = getLessonDate(week, weekday+1)
+        let endDate = getLessonDate(week, weekday+1)
+        startDate.setHours(startHour)
+        startDate.setMinutes(startMinute)
+        endDate.setHours(endHour)
+        endDate.setMinutes(endMinute)
+        this.startMilliseconds = startDate.getTime()
+        this.endMilliseconds = endDate.getTime()
         this.styleData = style // The colors that should be used for the lesson, as html style tag data
     }
 
@@ -61,12 +69,9 @@ class ScheduleEntry {
      * @param {Date} date 
      */
     isCurrent(date) {
-        // If it's not the same day
-        if (date.getDay()-1 != this.weekday) return false;
-        const dateMilliseconds = getInMilliseconds(date)
+        const dateMilliseconds = date.getTime()
 
         // Or if it's before the start or after the end, return false
-        // TODO: Assumes it's the same week... 
         if (dateMilliseconds < this.startMilliseconds || dateMilliseconds > this.endMilliseconds) return false;
 
         return true;
@@ -76,15 +81,15 @@ class ScheduleEntry {
     getString(date, includeAfter, excludeGroups) {
         if (this.isCurrent(date)) {
             // Current lesson string
-            return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> slutar om <b>${toTimeString(this.endMilliseconds - getInMilliseconds(date), Math.ceil, true)}</b><br></span>`
+            return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> slutar om <b>${toTimeString(this.endMilliseconds - date.getTime(), Math.ceil, true)}</b><br></span>`
         }
-        if (getInMilliseconds(date) < this.startMilliseconds) {
+        if (date.getTime() < this.startMilliseconds) {
             // Future lesson string
-            return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> börjar om <b>${toTimeString(this.startMilliseconds - getInMilliseconds(date), Math.ceil, true)}</b><br></span>`
+            return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> börjar om <b>${toTimeString(this.startMilliseconds - date.getTime(), Math.ceil, true)}</b><br></span>`
         }
-        if (getInMilliseconds(date) > this.endMilliseconds && includeAfter) {
+        if (date.getTime() > this.endMilliseconds && includeAfter) {
             // Past lesson string (if we include lessons after they end)
-            return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> slutate <b>${toTimeString(getInMilliseconds(date) - this.endMilliseconds, Math.floor, true)}</b> sedan<br></span>`
+            return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> slutate <b>${toTimeString(date.getTime() - this.endMilliseconds, Math.floor, true)}</b> sedan<br></span>`
         }
         // We don't include the lesson
         return ""
@@ -92,7 +97,9 @@ class ScheduleEntry {
 
     // Get a string for when the lesson is, instead of in how long
     getTimeString(excludeGroups) {
-        return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> kl. <b>${toTimeString(this.startMilliseconds, Math.floor, false)}</b><br></span>`
+        let tempDate = new Date()
+        tempDate.setTime(this.startMilliseconds)
+        return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> kl. <b>${toTimeString(getInMilliseconds(tempDate), Math.floor, false)}</b><br></span>`
     }
 }
 

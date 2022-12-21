@@ -7,6 +7,7 @@ let show_previous = getCookie("show_previous") === "1"
 let groups = JSON.parse(getCookie("student_groups"))
 if (groups === null) groups = []
 let loaded = false
+let future_countdown = getCookie("future_countdown") === "1"
 
 $(document).ready(function() {
     // Add generic content for all pages
@@ -14,12 +15,14 @@ $(document).ready(function() {
 
     document.body.innerHTML+='<h1>Metapontum <span id="scheduleName"></span> Schema <span id="date"></span> kl. <span id="time">00:00:00</span></h1><p>För tillfället använder vi namnen direkt från schoolsoft, men detta går att ändra om vi vill</p>'
     document.body.innerHTML+='<h2 id="previousTitle"></h2><p class="lessons" id="previous"></p><h2 id="currentTitle"></h2><p class="lessons" id="current"></p><h2 id="laterTitle"></h2><p class="lessons" id="later"></p><h2 id="nextDayTitle"></h2><p class="lessons" id="nextDay"></p>'
-    document.body.innerHTML+='<h2><kbd>Stoppa Script</kbd> är användbart för att kopiera text</h2><button id="toggle_scripts">Stoppa Script</button><button id="toggle_previous">Visa Tidigare</button>'
+    document.body.innerHTML+='<h2><kbd>Stoppa Script</kbd> är användbart för att kopiera text</h2><button id="toggle_scripts"></button><button id="toggle_previous"></button><button id="toggle_future_countdown"></button>'
     document.body.innerHTML+='<br/><p>Grupper: </p><div id="group_select"></div>'
-    document.body.innerHTML+='<br/><br/>Inställningar är: <kbd>Visa Tidigare</kbd>, <kbd>Grupper</kbd><br/><button id="cookie_save">Spara inställningar (cookies)</button><button id="cookie_remove">Glöm cookies</button>'
+    document.body.innerHTML+='<br/><br/>Inställningar är: <kbd>Visa Tidigare</kbd>, <kbd>Grupper</kbd>, <kbd>Visning av nästa dag</kbd><br/><button id="cookie_save">Spara inställningar (cookies)</button><button id="cookie_remove">Glöm cookies</button>'
 
     // Set button names
+    document.getElementById("toggle_scripts").innerHTML = run_scripts? "Stoppa Script": "Starta Script"
     document.getElementById("toggle_previous").innerHTML = show_previous? "Dölj Tidigare": "Visa Tidigare"
+    document.getElementById("toggle_future_countdown").innerHTML = future_countdown? "Visa klockslag för nästa dag": "Visa nedräkningar för nästa dag"
 
     // Add callbacks to buttons
     $("#toggle_scripts").click(() => {
@@ -30,13 +33,19 @@ $(document).ready(function() {
         show_previous = !show_previous
         document.getElementById("toggle_previous").innerHTML = show_previous? "Dölj Tidigare": "Visa Tidigare"
     })
+    $("#toggle_future_countdown").click(() => {
+        future_countdown = !future_countdown
+        document.getElementById("toggle_future_countdown").innerHTML = future_countdown? "Visa klockslag för nästa dag": "Visa nedräkningar för nästa dag"
+    })
     $("#cookie_save").click(() => {
         createCookie("show_previous", +show_previous)
         createCookie("student_groups", JSON.stringify(groups))
+        createCookie("future_countdown", +future_countdown)
     })
     $("#cookie_remove").click(() => {
         createCookie("show_previous", null, -1)
         createCookie("student_groups", null, -1)
+        createCookie("future_countdown", null, -1)
     })
 
     function afterLoad() {
@@ -75,7 +84,7 @@ $(document).ready(function() {
     // Refresh all dynamic fields
     function render() {
 
-        // We have paused (usefull for people who want to copy paste something), return
+        // If we have paused (usefull for people who want to copy paste something), return
         if (!run_scripts) return
 
         clearFields()
@@ -99,15 +108,7 @@ $(document).ready(function() {
         getNextDay(now)
 
         // Make the test time move
-        if (testTime !== null) testTime = new Date(
-            testTime.getFullYear(),
-            testTime.getMonth(),
-            testTime.getDate(),
-            testTime.getHours(),
-            testTime.getMinutes(),
-            testTime.getSeconds(),
-            testTime.getMilliseconds() + 500
-        )
+        if (testTime !== null) testTime.setMilliseconds(testTime.getMilliseconds()+500)
     }
 
     // First render
@@ -130,7 +131,7 @@ function getToday(date) {
     for (let i = 0; i < lessons.length; i++) {
         if (!lessons[i].studentHas(groups)) continue
 
-        if (lessons[i].endMilliseconds < getInMilliseconds(date)) {
+        if (lessons[i].endMilliseconds < date.getTime()) {
             outPrevious += lessons[i].getString(date, show_previous, [currentSchedule])
             continue
         }
@@ -185,7 +186,8 @@ function getNextDay(date) {
     for (let i = 0; i < lessons.length; i++) {
         if (!lessons[i].studentHas(groups)) continue
 
-        outStr += lessons[i].getTimeString([currentSchedule])
+        if (future_countdown) outStr += lessons[i].getString(date, show_previous, [currentSchedule])
+        else outStr += lessons[i].getTimeString([currentSchedule])
     }
     document.getElementById("nextDay").innerHTML = outStr
 
