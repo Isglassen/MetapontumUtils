@@ -168,7 +168,7 @@ function getNextDayWeek(date) {
     }
 
     // Loop through every day from the previously set day until we find one with lessons
-    while (schedule[week][weekday-1].length === 0) {
+    while (schedule[week][weekday===0? 6: weekday-1].length === 0) {
         // Increase the week if it's a sunday
         if (weekday == 0) {
             // There is no next day
