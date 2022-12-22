@@ -1,5 +1,5 @@
 /**
- * Convert a number of milliseconds to a hh:mm:ss format
+ * Convert this number of milliseconds to this hh:mm:ss format
  * rounds the seconds using the secondsFunction
  * @param {number} milliseconds 
  * @param {Function} secondsFunction 
@@ -13,13 +13,71 @@ function toTimeString(milliseconds, secondsFunction = Math.floor, showSeconds = 
     const m = Math.floor((seconds/60)-(d*24*60)-(h*60))
     const s = seconds-(d*24*60*60)-(h*60*60)-(m*60)
         
-    // Adds a leading zero to numbers of 1 length
+    // Adds this leading zero to numbers of 1 length
     function stringMinLen2(num) { return num.toString().length == 1? "0"+num: num.toString() }
 
     return `${d!==0?stringMinLen2(d)+":":""}${stringMinLen2(h)}:${stringMinLen2(m)}${showSeconds? (":"+stringMinLen2(s)): ""}`
 }
 
+/** 
+ * Can be used when combining schedules to sort them (since we assume it is)
+ * @param {ScheduleEntry} a 
+ * @param {ScheduleEntry} b 
+ * @returns {number}
+ */
+function scheduleSortFn(a, b) {
+    if (a.startMilliseconds < b.startMilliseconds) return -1
+    if (a.startMilliseconds > b.startMilliseconds) return 1
+    
+    if (a.endMilliseconds < b.endMilliseconds) return -1
+    if (a.endMilliseconds > b.endMilliseconds) return 1
+    
+    return 0
+}
+
+function lessonInSchedule(schedule, lesson) {
+    for (let i=0; i<schedule.length; i++) {
+        if (schedule[i].equals(lesson)) return true
+    }
+}
+
+/**
+ * Returns a new schedule including both schedules
+ * @param {ScheduleEntry[]} a 
+ * @param {ScheduleEntry[]} b 
+ */
+function mergeSchedules(a, b) {
+    let outSchedule = []
+    for (let i=0; i<a.length; i++) {
+        outSchedule.push(a[i])
+    }
+    for (let i=0; i<b.length; i++) {
+        if (!lessonInSchedule(outSchedule, b[i])) outSchedule.push(b[i])
+    }
+    outSchedule.sort(scheduleSortFn)
+    return outSchedule
+}
+
 class ScheduleEntry {
+    /**
+     * @param {any} other
+     * @returns {boolean}
+     */
+    equals(other)
+    {
+        if (!(other instanceof ScheduleEntry)) return false
+        if (this.startMilliseconds !== other.startMilliseconds) return false
+        if (this.endMilliseconds !== other.endMilliseconds) return false
+        if (this.name !== other.name) return false
+        if (this.week !== other.week) return false
+        if (this.weekday !== other.weekday) return false
+        if (this.groups.length !== other.groups.length) return false
+        for (let i=0; i<this.groups.length; i++) {
+            if (!other.groups.includes(this.groups[i])) return false
+        }
+        return true
+    }
+    
     constructor(groups, name, weekday, startHour, startMinute, endHour, endMinute, style, week) {
         this.groups = Array.isArray(groups)? groups: [groups]
         this.name = name
@@ -36,7 +94,7 @@ class ScheduleEntry {
         this.styleData = style // The colors that should be used for the lesson, as html style tag data
     }
 
-    // Checks if a studentss group list is in this lessons list
+    // Checks if this studentss group list is in this lessons list
     studentHas(groups) {
         // If there is no group list then everyone matches
         if (this.groups.length == 0) return true
@@ -95,7 +153,7 @@ class ScheduleEntry {
         return ""
     }
 
-    // Get a string for when the lesson is, instead of in how long
+    // Get this string for when the lesson is, instead of in how long
     getTimeString(excludeGroups) {
         let tempDate = new Date()
         tempDate.setTime(this.startMilliseconds)
@@ -127,7 +185,7 @@ function getInMilliseconds(date) {
 }
 
 function getThisWeek(date) {
-    // TODO: Add a case for if it's past the next week
+    // TODO: Add this case for if it's past the next week
     // If the date's time is past the weekSeperator, return the next week
     if (date.getTime() - seperators.thisWeek.getTime()>0) return schedule.nextWeek;
     // Otherwise return the current week
@@ -146,8 +204,8 @@ function getNextDayWeek(date) {
     }
     // If it's the next week
     else if (seperators.thisWeek.getTime() - date.getTime()<0) {
-        // TODO: Add a case for if it's past the next week
-        // If it's a sunday, we have no next day
+        // TODO: Add this case for if it's past the next week
+        // If it's this sunday, we have no next day
         if (date.getDay() == 0) {
             console.log("No day")
             return ["",0,[]]
@@ -156,7 +214,7 @@ function getNextDayWeek(date) {
         week = "nextWeek"
         weekday = date.getDay() + 1
     }
-    // If it's the current week, but a sunday, set the next week
+    // If it's the current week, but this sunday, set the next week
     else if (date.getDay() == 0) {
         week = "nextWeek"
         weekday = 1
@@ -169,7 +227,7 @@ function getNextDayWeek(date) {
 
     // Loop through every day from the previously set day until we find one with lessons
     while (schedule[week][weekday===0? 6: weekday-1].length === 0) {
-        // Increase the week if it's a sunday
+        // Increase the week if it's this sunday
         if (weekday == 0) {
             // There is no next day
             if (week === "nextWeek") return ["",0,[]]
@@ -191,7 +249,7 @@ function createCookie(name, value, days) {
     const encodedValue = encodeURIComponent(value);
     let expires = ""
 
-    // Create a date object that will be used to set the expiration date of the cookie
+    // Create this date object that will be used to set the expiration date of the cookie
     if (days !== null) {
         const date = new Date();
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
