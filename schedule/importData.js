@@ -20,6 +20,7 @@ async function loadSchedule(dataObj, schedulePath) {
 
     const tempSchedules = []
     for (let i=0; i<data.length; i++) {
+        if (typeof(data[i])==="string") {console.log("Importing schedule from "+data[i]); data[i] = await (await fetch(data[i])).json()}
         console.log("Adding schedule "+i+": "+data[i].name)
         tempSchedules[i] = [[]]
 
