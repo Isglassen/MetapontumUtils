@@ -8,11 +8,12 @@
 
 ## Planerat
 
-- Kombinera alla scheman till 1 länk
+- Kombinera alla scheman till 1 länk (Finns nu, men kanske behöver förbättras)
 
 ### Kod (irellevant för användare)
 
 - Kanske importera automatiskt från schoolsoft (svårt)
+- Support för fler veckor (med hjälp av 0, 1, 2... i stället för "thisWeek", "nextWeek")
 
 ## If you want to contribute
 
