@@ -110,7 +110,7 @@ for day in lessons:
         style = lesson["style"]
         if style == "":
             style = "background-color:#ffffff; color:#000000"
-        outObj.append(lesson["style"]) # Colors for the lesson
+        outObj.append(style) # Colors for the lesson
         dayData.append(NoIndent(outObj))
     output.append(dayData)
     weekday += 1
