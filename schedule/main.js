@@ -11,8 +11,6 @@ let future_countdown = getCookie("future_countdown") === "1"
 
 $(document).ready(function() {
     // Add generic content for all pages
-    document.head.innerHTML+='<link rel="stylesheet" href="../style.css">'
-
     document.body.innerHTML+='<h1>Metapontum <span id="scheduleName"></span> Schema <span id="date"></span> kl. <span id="time">00:00:00</span></h1><p>För tillfället använder vi namnen direkt från schoolsoft, men detta går att ändra om vi vill</p>'
     document.body.innerHTML+='<h2 id="previousTitle"></h2><p class="lessons" id="previous"></p><h2 id="currentTitle"></h2><p class="lessons" id="current"></p><h2 id="laterTitle"></h2><p class="lessons" id="later"></p><h2 id="nextDayTitle"></h2><p class="lessons" id="nextDay"></p>'
     document.body.innerHTML+='<h2><kbd>Stoppa Script</kbd> är användbart för att kopiera text</h2><button id="toggle_scripts"></button><button id="toggle_previous"></button><button id="toggle_future_countdown"></button>'
@@ -49,8 +47,9 @@ $(document).ready(function() {
     })
 
     function afterLoad() {
+        if (!currentSchedule.startsWith("__")) addGroup(groups, currentSchedule)
+        if (currentSchedule.startsWith("__")) currentSchedule = currentSchedule.substring(2)
         document.getElementById("scheduleName").innerHTML = currentSchedule
-        addGroup(groups, currentSchedule)
         document.head.innerHTML+=`<title>${currentSchedule} Schema</title>`
         groupSelectStr = ""
         for (let i=0; i<allGroups.length; i++) {

@@ -1,0 +1,1014 @@
+[
+    {
+        "name": "9B",
+        "thisWeek": [
+            [
+                [
+                    "9B",
+                    "IdH",
+                    0,
+                    9,
+                    0,
+                    10,
+                    0,
+                    "background-color:#b31cd9; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Ke",
+                    0,
+                    10,
+                    45,
+                    11,
+                    25,
+                    "background-color:#234dc2; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Lunch",
+                    0,
+                    11,
+                    45,
+                    12,
+                    5,
+                    "background-color:#f5f3e4; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Ma",
+                    0,
+                    12,
+                    5,
+                    12,
+                    55,
+                    "background-color:#ebf26f; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Ma",
+                    0,
+                    12,
+                    5,
+                    12,
+                    55,
+                    "background-color:#ebf26f; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Sv",
+                    0,
+                    13,
+                    0,
+                    14,
+                    20,
+                    "background-color:#9dd5e8; color:#000000; "
+                ],
+                [
+                    "Mspr Spa 9",
+                    "Mspr Sp",
+                    0,
+                    14,
+                    30,
+                    15,
+                    30,
+                    "background-color:#4ddbeb; color:#000000; "
+                ],
+                [
+                    "Mspr Ty 9",
+                    "Mspr Ty",
+                    0,
+                    14,
+                    30,
+                    15,
+                    30,
+                    "background-color:#ffffff; color:#000000"
+                ],
+                [
+                    "Mspr Fra 9",
+                    "Mspr Fr",
+                    0,
+                    14,
+                    30,
+                    15,
+                    30,
+                    "background-color:#21d5f8; color:#000000; "
+                ],
+                [
+                    "Stöd.SA",
+                    "Stöd",
+                    0,
+                    14,
+                    30,
+                    15,
+                    30,
+                    "background-color:#ffffff; color:#000000"
+                ]
+            ],
+            [
+                [
+                    "9B",
+                    "Tk",
+                    1,
+                    8,
+                    45,
+                    9,
+                    25,
+                    "background-color:#60b86f; color:#000000; "
+                ],
+                [
+                    "Mspr Spa 9",
+                    "Mspr Sp",
+                    1,
+                    9,
+                    40,
+                    10,
+                    30,
+                    "background-color:#4ddbeb; color:#000000; "
+                ],
+                [
+                    "Mspr Ty 9",
+                    "Mspr Ty",
+                    1,
+                    9,
+                    40,
+                    10,
+                    30,
+                    "background-color:#ffffff; color:#000000"
+                ],
+                [
+                    "Mspr Fra 9",
+                    "Mspr Fr",
+                    1,
+                    9,
+                    40,
+                    10,
+                    30,
+                    "background-color:#21d5f8; color:#000000; "
+                ],
+                [
+                    "Stöd.SA",
+                    "Stöd",
+                    1,
+                    9,
+                    40,
+                    10,
+                    30,
+                    "background-color:#ffffff; color:#000000"
+                ],
+                [
+                    "9B",
+                    "Ma",
+                    1,
+                    10,
+                    35,
+                    11,
+                    55,
+                    "background-color:#ebf26f; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Lunch",
+                    1,
+                    12,
+                    20,
+                    12,
+                    40,
+                    "background-color:#f5f3e4; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Sv",
+                    1,
+                    12,
+                    40,
+                    13,
+                    25,
+                    "background-color:#9dd5e8; color:#000000; "
+                ],
+                [
+                    "9B Y",
+                    "Bl",
+                    1,
+                    13,
+                    45,
+                    14,
+                    30,
+                    "background-color:#e6814e; color:#000000; "
+                ],
+                [
+                    "9B X",
+                    "Mu",
+                    1,
+                    13,
+                    45,
+                    14,
+                    30,
+                    "background-color:#c1d02a; color:#000000; "
+                ],
+                [
+                    "9B Y",
+                    "Mu",
+                    1,
+                    14,
+                    35,
+                    15,
+                    20,
+                    "background-color:#c1d02a; color:#000000; "
+                ],
+                [
+                    "9B X",
+                    "Bl",
+                    1,
+                    14,
+                    35,
+                    15,
+                    20,
+                    "background-color:#e6814e; color:#000000; "
+                ],
+                [
+                    "Mmål Pol gr 1~1",
+                    "Mmål Pol",
+                    1,
+                    15,
+                    20,
+                    16,
+                    20,
+                    "background-color:#ffffff; color:#000000"
+                ]
+            ],
+            [
+                [
+                    "9B",
+                    "Ma",
+                    2,
+                    8,
+                    25,
+                    9,
+                    5,
+                    "background-color:#ebf26f; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Hi",
+                    2,
+                    9,
+                    15,
+                    10,
+                    0,
+                    "background-color:#9795c4; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Ke",
+                    2,
+                    10,
+                    5,
+                    10,
+                    45,
+                    "background-color:#234dc2; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Tk",
+                    2,
+                    10,
+                    50,
+                    11,
+                    30,
+                    "background-color:#60b86f; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Lunch",
+                    2,
+                    12,
+                    0,
+                    12,
+                    20,
+                    "background-color:#f5f3e4; color:#000000; "
+                ],
+                [
+                    "9B Y",
+                    "Sl",
+                    2,
+                    12,
+                    20,
+                    13,
+                    30,
+                    "background-color:#cda852; color:#000000; "
+                ],
+                [
+                    "9B X",
+                    "Hkk",
+                    2,
+                    12,
+                    20,
+                    13,
+                    30,
+                    "background-color:#84e021; color:#000000; "
+                ],
+                [
+                    "9B Y",
+                    "Hkk",
+                    2,
+                    13,
+                    45,
+                    14,
+                    55,
+                    "background-color:#84e021; color:#000000; "
+                ],
+                [
+                    "9B X",
+                    "Sl",
+                    2,
+                    13,
+                    45,
+                    14,
+                    55,
+                    "background-color:#cda852; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "IdH",
+                    2,
+                    15,
+                    10,
+                    16,
+                    0,
+                    "background-color:#b31cd9; color:#000000; "
+                ],
+                [
+                    "Mmål Ara gr 3",
+                    "Mmål Ara",
+                    2,
+                    15,
+                    30,
+                    16,
+                    30,
+                    "background-color:#ffffff; color:#000000"
+                ]
+            ],
+            [
+                [
+                    "Extra idrott",
+                    "IdH",
+                    3,
+                    8,
+                    0,
+                    9,
+                    0,
+                    "background-color:#b31cd9; color:#000000; "
+                ],
+                [
+                    "Mmål Rys gr 5~1",
+                    "Mmål Rys",
+                    3,
+                    8,
+                    0,
+                    9,
+                    0,
+                    "background-color:#ffffff; color:#000000"
+                ],
+                [
+                    "9B Y",
+                    "Ke",
+                    3,
+                    9,
+                    0,
+                    10,
+                    0,
+                    "background-color:#234dc2; color:#000000; "
+                ],
+                [
+                    "9B X",
+                    "Fy/Tk",
+                    3,
+                    9,
+                    20,
+                    10,
+                    0,
+                    "background-color:#ffffff; color:#000000"
+                ],
+                [
+                    "Mspr Ty 9",
+                    "Mspr Ty",
+                    3,
+                    10,
+                    5,
+                    10,
+                    45,
+                    "background-color:#ffffff; color:#000000"
+                ],
+                [
+                    "Mspr Spa 9",
+                    "Mspr Sp",
+                    3,
+                    10,
+                    5,
+                    10,
+                    45,
+                    "background-color:#4ddbeb; color:#000000; "
+                ],
+                [
+                    "Mspr Fra 9",
+                    "Mspr Fr",
+                    3,
+                    10,
+                    5,
+                    10,
+                    45,
+                    "background-color:#21d5f8; color:#000000; "
+                ],
+                [
+                    "Stöd.SA",
+                    "Stöd",
+                    3,
+                    10,
+                    5,
+                    10,
+                    45,
+                    "background-color:#ffffff; color:#000000"
+                ],
+                [
+                    "9B",
+                    "IdH",
+                    3,
+                    11,
+                    0,
+                    11,
+                    50,
+                    "background-color:#b31cd9; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Lunch",
+                    3,
+                    12,
+                    10,
+                    12,
+                    30,
+                    "background-color:#f5f3e4; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Sv",
+                    3,
+                    12,
+                    30,
+                    13,
+                    5,
+                    "background-color:#9dd5e8; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Sh",
+                    3,
+                    13,
+                    15,
+                    14,
+                    20,
+                    "background-color:#f2b50e; color:#000000; "
+                ],
+                [
+                    "9B",
+                    "Sh",
+                    3,
+                    14,
+                    25,
+                    15,
+                    15,
+                    "background-color:#f2b50e; color:#000000; "
+                ],
+                [
+                    "9 val ma",
+                    "Val Ma",
+                    3,
+                    15,
+                    20,
+                    16,
+                    0,
+                    "background-color:#ffffff; color:#000000"
+                ]
+            ],
+            []
+        ],
+        "nextWeek": [
+            [],
+            [],
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "name": "9A",
+        "thisWeek": [
+            [
+                [
+                    "9A",
+                    "Fy",
+                    0,
+                    8,
+                    45,
+                    9,
+                    25,
+                    "background-color:#128a5a; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "Hi",
+                    0,
+                    9,
+                    30,
+                    10,
+                    10,
+                    "background-color:#9795c4; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "En",
+                    0,
+                    10,
+                    15,
+                    11,
+                    15,
+                    "background-color:#ba5c0f; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "Lunch",
+                    0,
+                    11,
+                    20,
+                    11,
+                    40,
+                    "background-color:#f5f3e4; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "IdH",
+                    0,
+                    12,
+                    5,
+                    12,
+                    55,
+                    "background-color:#b31cd9; color:#000000; "
+                ],
+                [
+                    "9A Y",
+                    "Ke",
+                    0,
+                    13,
+                    25,
+                    14,
+                    25,
+                    "background-color:#234dc2; color:#000000; "
+                ],
+                [
+                    "9A X",
+                    "Fy/Tk",
+                    0,
+                    13,
+                    45,
+                    14,
+                    25,
+                    "background-color:#ffffff; color:#000000"
+                ],
+                [
+                    "Mspr Spa 9",
+                    "Mspr Sp",
+                    0,
+                    14,
+                    30,
+                    15,
+                    30,
+                    "background-color:#4ddbeb; color:#000000; "
+                ],
+                [
+                    "Mspr Ty 9",
+                    "Mspr Ty",
+                    0,
+                    14,
+                    30,
+                    15,
+                    30,
+                    "background-color:#ffffff; color:#000000"
+                ],
+                [
+                    "Mspr Fra 9",
+                    "Mspr Fr",
+                    0,
+                    14,
+                    30,
+                    15,
+                    30,
+                    "background-color:#21d5f8; color:#000000; "
+                ],
+                [
+                    "Mspr En",
+                    "En",
+                    0,
+                    14,
+                    30,
+                    15,
+                    10,
+                    "background-color:#ba5c0f; color:#000000; "
+                ],
+                [
+                    "9A S",
+                    "Ma3c",
+                    0,
+                    15,
+                    45,
+                    16,
+                    45,
+                    "background-color:#1b64fa; color:#000000; "
+                ]
+            ],
+            [
+                [
+                    "9A",
+                    "Ke",
+                    1,
+                    8,
+                    0,
+                    8,
+                    40,
+                    "background-color:#234dc2; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "Ke",
+                    1,
+                    8,
+                    45,
+                    9,
+                    25,
+                    "background-color:#234dc2; color:#000000; "
+                ],
+                [
+                    "Mspr Spa 9",
+                    "Mspr Sp",
+                    1,
+                    9,
+                    40,
+                    10,
+                    30,
+                    "background-color:#4ddbeb; color:#000000; "
+                ],
+                [
+                    "Mspr Ty 9",
+                    "Mspr Ty",
+                    1,
+                    9,
+                    40,
+                    10,
+                    30,
+                    "background-color:#ffffff; color:#000000"
+                ],
+                [
+                    "Mspr Fra 9",
+                    "Mspr Fr",
+                    1,
+                    9,
+                    40,
+                    10,
+                    30,
+                    "background-color:#21d5f8; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "Sh",
+                    1,
+                    10,
+                    40,
+                    12,
+                    0,
+                    "background-color:#f2b50e; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "Lunch",
+                    1,
+                    12,
+                    20,
+                    12,
+                    40,
+                    "background-color:#f5f3e4; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "Sv",
+                    1,
+                    12,
+                    40,
+                    13,
+                    25,
+                    "background-color:#9dd5e8; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "Mtid",
+                    1,
+                    13,
+                    30,
+                    14,
+                    10,
+                    "background-color:#eb912a; color:#000000; "
+                ],
+                [
+                    "9A ej S",
+                    "Ma",
+                    1,
+                    14,
+                    20,
+                    15,
+                    20,
+                    "background-color:#ebf26f; color:#000000; "
+                ],
+                [
+                    "9A S",
+                    "Ma",
+                    1,
+                    14,
+                    20,
+                    15,
+                    20,
+                    "background-color:#ebf26f; color:#000000; "
+                ]
+                ],
+                [
+                [
+                    "9A X",
+                    "Hkk",
+                    2,
+                    8,
+                    0,
+                    9,
+                    10,
+                    "background-color:#84e021; color:#000000; "
+                ],
+                [
+                    "9A Y",
+                    "Sl",
+                    2,
+                    8,
+                    0,
+                    9,
+                    10,
+                    "background-color:#cda852; color:#000000; "
+                ],
+                [
+                    "9A X",
+                    "Sl",
+                    2,
+                    9,
+                    20,
+                    10,
+                    30,
+                    "background-color:#cda852; color:#000000; "
+                ],
+                [
+                    "9A Y",
+                    "Hkk",
+                    2,
+                    9,
+                    20,
+                    10,
+                    30,
+                    "background-color:#84e021; color:#000000; "
+                ],
+                [
+                    "9A X",
+                    "Bl",
+                    2,
+                    10,
+                    40,
+                    11,
+                    25,
+                    "background-color:#e6814e; color:#000000; "
+                ],
+                [
+                    "9A Y",
+                    "Mu",
+                    2,
+                    10,
+                    40,
+                    11,
+                    25,
+                    "background-color:#c1d02a; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "Hi",
+                    2,
+                    11,
+                    30,
+                    12,
+                    10,
+                    "background-color:#9795c4; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "Lunch",
+                    2,
+                    12,
+                    10,
+                    12,
+                    30,
+                    "background-color:#f5f3e4; color:#000000; "
+                ],
+                [
+                    "9A ej S",
+                    "Ma",
+                    2,
+                    12,
+                    50,
+                    13,
+                    40,
+                    "background-color:#ebf26f; color:#000000; "
+                ],
+                [
+                    "9A S",
+                    "Ma",
+                    2,
+                    12,
+                    50,
+                    13,
+                    50,
+                    "background-color:#ebf26f; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "Ma",
+                    2,
+                    12,
+                    50,
+                    13,
+                    40,
+                    "background-color:#ebf26f; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "IdH",
+                    2,
+                    14,
+                    5,
+                    15,
+                    5,
+                    "background-color:#b31cd9; color:#000000; "
+                ]
+            ],
+            [
+                [
+                    "Mmål Rys gr 5~1",
+                    "Mmål Rys",
+                    3,
+                    8,
+                    0,
+                    9,
+                    0,
+                    "background-color:#ffffff; color:#000000"
+                ],
+                [
+                    "9A ej S",
+                    "Ma",
+                    3,
+                    9,
+                    5,
+                    10,
+                    0,
+                    "background-color:#ebf26f; color:#000000; "
+                ],
+                [
+                    "9A S",
+                    "Ma",
+                    3,
+                    9,
+                    5,
+                    10,
+                    0,
+                    "background-color:#ebf26f; color:#000000; "
+                ],
+                [
+                    "Mspr Ty 9",
+                    "Mspr Ty",
+                    3,
+                    10,
+                    5,
+                    10,
+                    45,
+                    "background-color:#ffffff; color:#000000"
+                ],
+                [
+                    "Mspr Spa 9",
+                    "Mspr Sp",
+                    3,
+                    10,
+                    5,
+                    10,
+                    45,
+                    "background-color:#4ddbeb; color:#000000; "
+                ],
+                [
+                    "Mspr Fra 9",
+                    "Mspr Fr",
+                    3,
+                    10,
+                    5,
+                    10,
+                    45,
+                    "background-color:#21d5f8; color:#000000; "
+                ],
+                [
+                    "Mspr En",
+                    "En",
+                    3,
+                    10,
+                    5,
+                    10,
+                    45,
+                    "background-color:#ba5c0f; color:#000000; "
+                ],
+                [
+                    "9A Y",
+                    "Bl",
+                    3,
+                    11,
+                    0,
+                    11,
+                    45,
+                    "background-color:#e6814e; color:#000000; "
+                ],
+                [
+                    "9A X",
+                    "Mu",
+                    3,
+                    11,
+                    0,
+                    11,
+                    45,
+                    "background-color:#c1d02a; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "Lunch",
+                    3,
+                    11,
+                    45,
+                    12,
+                    5,
+                    "background-color:#f5f3e4; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "Sv",
+                    3,
+                    12,
+                    30,
+                    13,
+                    5,
+                    "background-color:#9dd5e8; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "Fy",
+                    3,
+                    13,
+                    10,
+                    13,
+                    50,
+                    "background-color:#128a5a; color:#000000; "
+                ],
+                [
+                    "9A",
+                    "IdH",
+                    3,
+                    14,
+                    10,
+                    15,
+                    0,
+                    "background-color:#b31cd9; color:#000000; "
+                ],
+                [
+                    "9 val ma",
+                    "Val Ma",
+                    3,
+                    15,
+                    20,
+                    16,
+                    0,
+                    "background-color:#ffffff; color:#000000"
+                ]
+            ],
+            []
+        ],
+        "nextWeek": [
+            [],
+            [],
+            [],
+            [],
+            []
+        ]
+    }
+]

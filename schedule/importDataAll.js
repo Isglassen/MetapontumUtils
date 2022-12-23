@@ -10,11 +10,12 @@ let loading = 3
 // @ts-ignore
 let schedule = {thisWeek: [], nextWeek: []}
 // @ts-ignore
-let currentSchedule = ""
+let currentSchedule = "__Fullt"
 function loadSchedule() {
     fetch("schedule.json")
         .then(response => response.json())
         .then(data => {
+            const tempSchedules = []
             function addWeek(scheduleWeek, weekData, weekName) {
                 for (let i=0; i<weekData.length; i++){
                     let day = weekData[i]
@@ -29,13 +30,27 @@ function loadSchedule() {
                 }
                 while(scheduleWeek.length < 7) scheduleWeek.push([])
             }
+            for (let i=0; i<data.length; i++) {
+                console.log("Adding schedule "+i+": "+data[i].name)
+                tempSchedules[i] = {thisWeek: [], nextWeek: []}
 
-            currentSchedule = data.name
-            let thisWeek = data.thisWeek
-            let nextWeek = data.nextWeek
-            
-            addWeek(schedule.thisWeek, thisWeek, "thisWeek")
-            addWeek(schedule.nextWeek, nextWeek, "nextWeek")
+                let thisWeek = data[i].thisWeek
+                let nextWeek = data[i].nextWeek
+
+                addWeek(tempSchedules[i].thisWeek, thisWeek, "thisWeek")
+                addWeek(tempSchedules[i].nextWeek, nextWeek, "nextWeek")
+            }
+
+            schedule = tempSchedules[0]
+
+            for (let i=1; i<tempSchedules.length; i++) {
+                for (let j=0; j<schedule.thisWeek.length; j++) {
+                    schedule.thisWeek[j] = mergeSchedules(schedule.thisWeek[j], tempSchedules[i].thisWeek[j])
+                }
+                for (let j=0; j<schedule.nextWeek.length; j++) {
+                    schedule.nextWeek[j] = mergeSchedules(schedule.nextWeek[j], tempSchedules[i].nextWeek[j])
+                }
+            }
 
             loading--
         })
@@ -43,7 +58,7 @@ function loadSchedule() {
 
 // @ts-ignore
 const seperators = {}
-fetch("../date.json")
+fetch("date.json")
     .then(response => response.json())
     .then(data => {
         let entries = Object.entries(data)
