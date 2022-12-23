@@ -13,15 +13,18 @@ function addWeek(scheduleWeek, weekData, weekNum, dataObj) {
     while(scheduleWeek.length < 7) scheduleWeek.push([])
 }
 
-// TODO: Instead of replacing string with schedule, run the loadSchedule function on that schedule (make sure that only the base can set the currentSchedule field)
-async function loadSchedule(dataObj, schedulePath) {
+async function loadSchedulePart(dataObj, schedulePath, firstItr, tempSchedules) {
     let data = await (await fetch(schedulePath)).json()
 
-    if (!Array.isArray(data)) {dataObj.currentSchedule = data.name, data = [data]} 
+    if (!Array.isArray(data)) {if (firstItr) {dataObj.currentSchedule = data.name} data = [data]}
 
-    const tempSchedules = []
     for (let i=0; i<data.length; i++) {
-        if (typeof(data[i])==="string") {console.log("Importing schedule from "+data[i]); data[i] = await (await fetch(data[i])).json()}
+        if (typeof(data[i])==="string") {
+            console.group("Importing schedule from "+data[i])
+            await loadSchedulePart(dataObj, data[i], false, tempSchedules)
+            console.groupEnd()
+            continue
+        }
         console.log("Adding schedule "+i+": "+data[i].name)
         tempSchedules[i] = [[]]
 
@@ -30,6 +33,12 @@ async function loadSchedule(dataObj, schedulePath) {
             addWeek(tempSchedules[i][j], data[i].schedule[j], j, dataObj)
         }
     }
+}
+
+async function loadSchedule(dataObj, schedulePath, firstItr=true) {
+    const tempSchedules = []
+
+    await loadSchedulePart(dataObj, schedulePath, firstItr, tempSchedules)
 
     dataObj.schedule = tempSchedules[0]
 
