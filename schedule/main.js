@@ -68,9 +68,10 @@ $(document).ready(async function() {
         createCookie("future_countdown", null, -1)
     })
 
-    console.log("Loading");
+    console.group("Loading");
     ({ allGroups, schedule, currentSchedule, seperators } = await loadFn());
     console.log("Loaded");
+    console.groupEnd();
 
     if (!currentSchedule.startsWith("__")) addGroup(groups, currentSchedule)
     if (currentSchedule.startsWith("__")) currentSchedule = currentSchedule.substring(2)
@@ -111,6 +112,8 @@ $(document).ready(async function() {
 function getToday(date) {
     // Get lessons for this week
     const week = getThisWeek(schedule, seperators, date);
+    if (week === null) return
+
     const lessons = week[date.getDay()-1]
 
     let outPrevious = ""

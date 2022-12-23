@@ -13,7 +13,6 @@
 ### Kod (irellevant för användare)
 
 - Kanske importera automatiskt från schoolsoft (svårt)
-- Support för fler veckor (med hjälp av `0, 1, 2...` i stället för `"thisWeek", "nextWeek"`)
 
 ## If you want to contribute
 

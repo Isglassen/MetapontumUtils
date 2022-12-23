@@ -93,7 +93,7 @@ class ScheduleEntry {
         this.styleData = style // The colors that should be used for the lesson, as html style tag data
     }
 
-    // Checks if this studentss group list is in this lessons list
+    // Checks if this students group list is in this lessons list
     studentHas(groups) {
         // If there is no group list then everyone matches
         if (this.groups.length == 0) return true
@@ -152,7 +152,7 @@ class ScheduleEntry {
         return ""
     }
 
-    // Get this string for when the lesson is, instead of in how long
+    // Get a string for when the lesson is, instead of in how long
     getTimeString(excludeGroups) {
         let tempDate = new Date()
         tempDate.setTime(this.startMilliseconds)
@@ -173,7 +173,7 @@ function removeGroup(groupList, group) {
 }
 
 function getLessonDate(seperators, week, weekday) {
-    let date = week == "thisWeek"? new Date(seperators.lastWeek): new Date(seperators.thisWeek)
+    let date = new Date(seperators[week])
     date.setDate(date.getDate() + weekday-1)
     return date
 }
@@ -183,54 +183,56 @@ function getInMilliseconds(date) {
     return date.getHours()*60*60*1000 + date.getMinutes()*60*1000 + date.getSeconds()*1000 + date.getMilliseconds()
 }
 
+function getThisWeekNum(seperators, date){
+    let week = 0
+    while (date.getTime() - seperators[week].getTime()>0) {
+        week++
+        if (week>=seperators.length) {
+            let endSeperator = new Date(seperators[week-1])
+            endSeperator.setDate(endSeperator.getDate()+7)
+            if (date.getTime() - endSeperator.getTime()>0) return null
+            break
+        }
+    }
+    return week-1
+}
+
 function getThisWeek(schedule, seperators, date) {
-    // TODO: Add this case for if it's past the next week
-    // If the date's time is past the weekSeperator, return the next week
-    if (date.getTime() - seperators.thisWeek.getTime()>0) return schedule.nextWeek;
-    // Otherwise return the current week
-    return schedule.thisWeek
+    let week = getThisWeekNum(seperators, date)
+    if (week ===null || week < 0) return null
+    return schedule[week]
 }
 
 function getNextDayWeek(schedule, seperators, date) {
     // Initialise variables for the start of counting
-    let week = ""
+    let week = getThisWeekNum(seperators, date)
     let weekday = 0
 
+    if (week === null) return ["",0,[]]
+
     // If it's before this week, the next day is monday this week
-    if (seperators.lastWeek.getTime() - date.getTime()>0) {
-        week = "thisWeek"
+    if (week<0) {
+        week = 0
         weekday = 1
     }
-    // If it's the next week
-    else if (seperators.thisWeek.getTime() - date.getTime()<0) {
-        // TODO: Add this case for if it's past the next week
-        // If it's this sunday, we have no next day
-        if (date.getDay() == 0) {
-            console.log("No day")
-            return ["",0,[]]
-        }
-        // Otherwise simply start at the next day
-        week = "nextWeek"
-        weekday = date.getDay() + 1
-    }
-    // If it's the current week, but this sunday, set the next week
-    else if (date.getDay() == 0) {
-        week = "nextWeek"
-        weekday = 1
-    }
-    // Otherwise simply use next day
     else {
-        week = "thisWeek"
-        weekday = date.getDay() + 1
+        // If it's a sunday, set the next week
+        if (date.getDay()==0) {
+            week++
+            weekday = 1
+        }
+        else {
+            weekday = date.getDay() + 1
+        }
     }
 
     // Loop through every day from the previously set day until we find one with lessons
     while (schedule[week][weekday===0? 6: weekday-1].length === 0) {
-        // Increase the week if it's this sunday
+        // Increase the week if it's a sunday
         if (weekday == 0) {
+            week++
             // There is no next day
-            if (week === "nextWeek") return ["",0,[]]
-            week = "nextWeek" // Increase week
+            if (week>=schedule.length) return ["",0,[]]
         }
 
         weekday++
@@ -248,7 +250,7 @@ function createCookie(name, value, days) {
     const encodedValue = encodeURIComponent(value);
     let expires = ""
 
-    // Create this date object that will be used to set the expiration date of the cookie
+    // Create a date object that will be used to set the expiration date of the cookie
     if (days !== null) {
         const date = new Date();
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
