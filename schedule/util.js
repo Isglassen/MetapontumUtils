@@ -63,8 +63,7 @@ class ScheduleEntry {
      * @param {any} other
      * @returns {boolean}
      */
-    equals(other)
-    {
+    equals(other) {
         if (!(other instanceof ScheduleEntry)) return false
         if (this.startMilliseconds !== other.startMilliseconds) return false
         if (this.endMilliseconds !== other.endMilliseconds) return false
@@ -78,13 +77,13 @@ class ScheduleEntry {
         return true
     }
     
-    constructor(groups, name, weekday, startHour, startMinute, endHour, endMinute, style, week) {
+    constructor(groups, name, weekday, startHour, startMinute, endHour, endMinute, style, week, seperators) {
         this.groups = Array.isArray(groups)? groups: [groups]
         this.name = name
         this.weekday = weekday
         this.week = week
-        let startDate = getLessonDate(week, weekday+1)
-        let endDate = getLessonDate(week, weekday+1)
+        let startDate = getLessonDate(seperators, week, weekday+1)
+        let endDate = getLessonDate(seperators, week, weekday+1)
         startDate.setHours(startHour)
         startDate.setMinutes(startMinute)
         endDate.setHours(endHour)
@@ -173,7 +172,7 @@ function removeGroup(groupList, group) {
     }
 }
 
-function getLessonDate(week, weekday) {
+function getLessonDate(seperators, week, weekday) {
     let date = week == "thisWeek"? new Date(seperators.lastWeek): new Date(seperators.thisWeek)
     date.setDate(date.getDate() + weekday-1)
     return date
@@ -184,7 +183,7 @@ function getInMilliseconds(date) {
     return date.getHours()*60*60*1000 + date.getMinutes()*60*1000 + date.getSeconds()*1000 + date.getMilliseconds()
 }
 
-function getThisWeek(date) {
+function getThisWeek(schedule, seperators, date) {
     // TODO: Add this case for if it's past the next week
     // If the date's time is past the weekSeperator, return the next week
     if (date.getTime() - seperators.thisWeek.getTime()>0) return schedule.nextWeek;
@@ -192,7 +191,7 @@ function getThisWeek(date) {
     return schedule.thisWeek
 }
 
-function getNextDayWeek(date) {
+function getNextDayWeek(schedule, seperators, date) {
     // Initialise variables for the start of counting
     let week = ""
     let weekday = 0

@@ -7,7 +7,10 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         
         <script src="util.js"></script>
-        <script src="importDataAll.js"></script>
+        <script src="importData.js"></script>
+        <script>
+            async function loadFn() {return loadData("./groups.json", "./date.json", "./schedule.json")}
+        </script>
         <script src="main.js"></script>
     </head>
     <body></body>
