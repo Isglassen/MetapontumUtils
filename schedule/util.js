@@ -58,6 +58,50 @@ function mergeSchedules(a, b) {
     return outSchedule
 }
 
+/**
+ * Updates every start/endMilliseconds
+ * @param {ScheduleEntry[][][]} schedule
+ * @param {Date[]} seperators 
+ */
+function reloadSchedule(schedule, seperators) {
+    console.group("Schedule Reload")
+    for (let week=0; week<schedule.length; week++) {
+        console.groupCollapsed("Week "+week)
+        for (let day=0; day<schedule[week].length; day++) {
+            console.group("Day "+day)
+            for (let lesson=0; lesson<schedule[week][day].length; lesson++) {
+                let entry = schedule[week][day][lesson]
+
+                console.group(
+                    entry.name+" for "+entry.groups.join(", ")+" from "+
+                    stringMinLen2(entry.inputTimes.startHour)+":"+stringMinLen2(entry.inputTimes.startMinute)+" to "+
+                    stringMinLen2(entry.inputTimes.endHour)+":"+stringMinLen2(entry.inputTimes.endMinute)
+                )
+
+                if (entry.week !== week) console.warn("Week info did not match lessons actual week");
+                if (entry.weekday !== day) console.warn("Weekday did not match lessons actual day");
+
+                entry.week = week
+                entry.weekday = day
+
+                let startDate = getLessonDate(seperators, week, entry.weekday+1)
+                let endDate = getLessonDate(seperators, week, entry.weekday+1)
+                startDate.setHours(entry.inputTimes.startHour)
+                startDate.setMinutes(entry.inputTimes.startMinute)
+                endDate.setHours(entry.inputTimes.endHour)
+                endDate.setMinutes(entry.inputTimes.endMinute)
+                entry.startMilliseconds = startDate.getTime()
+                entry.endMilliseconds = endDate.getTime()
+
+                console.groupEnd()
+            }
+            console.groupEnd()
+        }
+        console.groupEnd()
+    }
+    console.groupEnd()
+}
+
 class ScheduleEntry {
     /**
      * @param {any} other
@@ -82,6 +126,7 @@ class ScheduleEntry {
         this.name = name
         this.weekday = weekday
         this.week = week
+        this.inputTimes = {startHour: startHour, startMinute: startMinute, endHour: endHour, endMinute: endMinute}
         let startDate = getLessonDate(seperators, week, weekday+1)
         let endDate = getLessonDate(seperators, week, weekday+1)
         startDate.setHours(startHour)
