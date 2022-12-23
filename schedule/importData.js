@@ -13,10 +13,11 @@ function addWeek(scheduleWeek, weekData, weekNum, dataObj) {
     while(scheduleWeek.length < 7) scheduleWeek.push([])
 }
 
+// TODO: Instead of replacing string with schedule, run the loadSchedule function on that schedule (make sure that only the base can set the currentSchedule field)
 async function loadSchedule(dataObj, schedulePath) {
     let data = await (await fetch(schedulePath)).json()
 
-    if (!Array.isArray(data)) {data = [data]} 
+    if (!Array.isArray(data)) {dataObj.currentSchedule = data.name, data = [data]} 
 
     const tempSchedules = []
     for (let i=0; i<data.length; i++) {
