@@ -8,6 +8,29 @@ if (groups === null) groups = []
 let loaded = false
 let future_countdown = getCookie("future_countdown") === "1"
 
+// Refresh all dynamic fields
+function render() {
+
+    // If we have paused (usefull for people who want to copy paste something), return
+    if (!run_scripts) return
+
+    clearFields()
+
+    let now = new Date()
+    // For using a custom times instead of current time (testing)
+    if (testTime !== null) now = testTime
+
+    // Update clock
+    document.getElementById("time").innerHTML = toTimeString(getInMilliseconds(now), Math.floor, true)
+    document.getElementById("date").innerHTML = now.getDate()+"/"+(now.getMonth()+1)
+
+    getToday(now)
+    getNextDay(now)
+
+    // Make the test time move
+    if (testTime !== null) testTime.setMilliseconds(testTime.getMilliseconds()+500)
+}
+
 $(document).ready(async function() {
     // Add generic content for all pages
     document.body.innerHTML+='<h1>Metapontum <span id="scheduleName"></span> Schema <span id="date"></span> kl. <span id="time">00:00:00</span></h1><p>För tillfället använder vi namnen direkt från schoolsoft, men detta går att ändra om vi vill</p>'
@@ -61,7 +84,7 @@ $(document).ready(async function() {
     document.getElementById("group_select").innerHTML += groupSelectStr
     options = document.getElementsByTagName("group-option")
     for (let i=0; i<options.length; i++) {
-        $(options[i]).click(function(e) {
+        $(options[i]).click((e) => {
             let target = e.delegateTarget
             if (!("selected" in target.dataset)) {
                 target.dataset.selected = "1"
@@ -76,29 +99,6 @@ $(document).ready(async function() {
             target.dataset.selected = "1"
             addGroup(groups, target.dataset.name)
         })
-    }
-
-    // Refresh all dynamic fields
-    function render() {
-
-        // If we have paused (usefull for people who want to copy paste something), return
-        if (!run_scripts) return
-
-        clearFields()
-
-        let now = new Date()
-        // For using a custom times instead of current time (testing)
-        if (testTime !== null) now = testTime
-
-        // Update clock
-        document.getElementById("time").innerHTML = toTimeString(getInMilliseconds(now), Math.floor, true)
-        document.getElementById("date").innerHTML = now.getDate()+"/"+(now.getMonth()+1)
-
-        getToday(now)
-        getNextDay(now)
-
-        // Make the test time move
-        if (testTime !== null) testTime.setMilliseconds(testTime.getMilliseconds()+500)
     }
 
     // First render

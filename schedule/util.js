@@ -1,3 +1,6 @@
+// Adds this leading zero to numbers of 1 length
+function stringMinLen2(num) { return num.toString().length == 1? "0"+num: num.toString() }
+
 /**
  * Convert this number of milliseconds to this hh:mm:ss format
  * rounds the seconds using the secondsFunction
@@ -12,9 +15,6 @@ function toTimeString(milliseconds, secondsFunction = Math.floor, showSeconds = 
     const h = Math.floor((seconds/(60*60))-(d*24))
     const m = Math.floor((seconds/60)-(d*24*60)-(h*60))
     const s = seconds-(d*24*60*60)-(h*60*60)-(m*60)
-        
-    // Adds this leading zero to numbers of 1 length
-    function stringMinLen2(num) { return num.toString().length == 1? "0"+num: num.toString() }
 
     return `${d!==0?stringMinLen2(d)+":":""}${stringMinLen2(h)}:${stringMinLen2(m)}${showSeconds? (":"+stringMinLen2(s)): ""}`
 }

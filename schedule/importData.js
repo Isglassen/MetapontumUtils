@@ -1,23 +1,24 @@
+function addWeek(scheduleWeek, weekData, weekName, dataObj) {
+    for (let i=0; i<weekData.length; i++){
+        let day = weekData[i]
+        scheduleWeek[i] = []
+        for (let j=0; j<day.length; j++){
+            let lesson = day[j]
+            scheduleWeek[i][j] = new ScheduleEntry(lesson[0], lesson[1], lesson[2], lesson[3], lesson[4], lesson[5], lesson[6], lesson[7], weekName, dataObj.seperators)
+            for (let group=0; group<scheduleWeek[i][j].groups.length; group++) {
+                addGroup(dataObj.allGroups, scheduleWeek[i][j].groups[group])
+            }
+        }
+    }
+    while(scheduleWeek.length < 7) scheduleWeek.push([])
+}
+
 async function loadSchedule(dataObj, schedulePath) {
     let data = await (await fetch(schedulePath)).json()
 
     if (!Array.isArray(data)) {data = [data]} 
 
     const tempSchedules = []
-    function addWeek(scheduleWeek, weekData, weekName) {
-        for (let i=0; i<weekData.length; i++){
-            let day = weekData[i]
-            scheduleWeek[i] = []
-            for (let j=0; j<day.length; j++){
-                let lesson = day[j]
-                scheduleWeek[i][j] = new ScheduleEntry(lesson[0], lesson[1], lesson[2], lesson[3], lesson[4], lesson[5], lesson[6], lesson[7], weekName, dataObj.seperators)
-                for (let group=0; group<scheduleWeek[i][j].groups.length; group++) {
-                    addGroup(dataObj.allGroups, scheduleWeek[i][j].groups[group])
-                }
-            }
-        }
-        while(scheduleWeek.length < 7) scheduleWeek.push([])
-    }
     for (let i=0; i<data.length; i++) {
         console.log("Adding schedule "+i+": "+data[i].name)
         tempSchedules[i] = {thisWeek: [], nextWeek: []}
@@ -25,8 +26,8 @@ async function loadSchedule(dataObj, schedulePath) {
         let thisWeek = data[i].thisWeek
         let nextWeek = data[i].nextWeek
 
-        addWeek(tempSchedules[i].thisWeek, thisWeek, "thisWeek")
-        addWeek(tempSchedules[i].nextWeek, nextWeek, "nextWeek")
+        addWeek(tempSchedules[i].thisWeek, thisWeek, "thisWeek", dataObj)
+        addWeek(tempSchedules[i].nextWeek, nextWeek, "nextWeek", dataObj)
     }
 
     dataObj.schedule = tempSchedules[0]
