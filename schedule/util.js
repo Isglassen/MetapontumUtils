@@ -68,11 +68,11 @@ function reloadSchedule(schedule, seperators) {
     for (let week=0; week<schedule.length; week++) {
         console.groupCollapsed("Week "+week)
         for (let day=0; day<schedule[week].length; day++) {
-            console.group("Day "+day)
+            console.groupCollapsed("Day "+day)
             for (let lesson=0; lesson<schedule[week][day].length; lesson++) {
                 let entry = schedule[week][day][lesson]
 
-                console.group(
+                console.groupCollapsed(
                     entry.name+" for "+entry.groups.join(", ")+" from "+
                     stringMinLen2(entry.inputTimes.startHour)+":"+stringMinLen2(entry.inputTimes.startMinute)+" to "+
                     stringMinLen2(entry.inputTimes.endHour)+":"+stringMinLen2(entry.inputTimes.endMinute)
