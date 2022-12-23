@@ -13,7 +13,7 @@ function addWeek(scheduleWeek, weekData, weekNum, dataObj) {
     while(scheduleWeek.length < 7) scheduleWeek.push([])
 }
 
-async function loadSchedulePart(dataObj, schedulePath, firstItr, tempSchedules) {
+async function loadSchedulePart(dataObj, schedulePath, firstItr, tempSchedules, offset) {
     let data = await (await fetch(schedulePath)).json()
 
     if (!Array.isArray(data)) {if (firstItr) {dataObj.currentSchedule = data.name} data = [data]}
@@ -21,16 +21,16 @@ async function loadSchedulePart(dataObj, schedulePath, firstItr, tempSchedules) 
     for (let i=0; i<data.length; i++) {
         if (typeof(data[i])==="string") {
             console.group("Importing schedule from "+data[i])
-            await loadSchedulePart(dataObj, data[i], false, tempSchedules)
+            await loadSchedulePart(dataObj, data[i], false, tempSchedules, i+offset)
             console.groupEnd()
             continue
         }
-        console.log("Adding schedule "+i+": "+data[i].name)
-        tempSchedules[i] = [[]]
+        console.log("Adding schedule "+(i+offset)+": "+data[i].name)
+        tempSchedules[i+offset] = [[]]
 
         for (let j=0; j<data[i].schedule.length; j++) {
-            tempSchedules[i][j] = []
-            addWeek(tempSchedules[i][j], data[i].schedule[j], j, dataObj)
+            tempSchedules[i+offset][j] = []
+            addWeek(tempSchedules[i+offset][j], data[i].schedule[j], j, dataObj)
         }
     }
 }
@@ -38,7 +38,7 @@ async function loadSchedulePart(dataObj, schedulePath, firstItr, tempSchedules) 
 async function loadSchedule(dataObj, schedulePath, firstItr=true) {
     const tempSchedules = []
 
-    await loadSchedulePart(dataObj, schedulePath, firstItr, tempSchedules)
+    await loadSchedulePart(dataObj, schedulePath, firstItr, tempSchedules, 0)
 
     dataObj.schedule = tempSchedules[0]
 
