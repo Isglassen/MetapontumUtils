@@ -24,8 +24,21 @@ function render() {
     document.getElementById("time").innerHTML = toTimeString(getInMilliseconds(now), Math.floor, true)
     document.getElementById("date").innerHTML = now.getDate()+"/"+(now.getMonth()+1)
 
-    getToday(now)
-    getNextDay(now)
+    if (seperators.length<schedule.length) {
+        console.error("Not enough seperators for every week")
+        document.getElementById("current").innerHTML += "<kbd>Datan verkar vara dåligt formaterad, vänligen kontakta utvecklaren</kbd>"
+        return
+    }
+
+    try {
+        getToday(now)
+        getNextDay(now)
+    }
+    catch(err) {
+        console.trace(err)
+        document.getElementById("current").innerHTML += "<kbd>Något gick fel. Datan var förmodligen dåligt formaterad. Vänligen kontakta utvecklaren</kbd>"
+        return
+    }
 
     // Make the test time move
     if (testTime !== null) testTime.setMilliseconds(testTime.getMilliseconds()+500)
