@@ -38,12 +38,13 @@ function scheduleSortFn(a, b) {
 /**
  * @param {ScheduleEntry[]} schedule 
  * @param {ScheduleEntry} lesson 
- * @returns 
+ * @returns {boolean}
  */
 function lessonInDaySchedule(schedule, lesson) {
-    for (let lesson=0; lesson<schedule.length; lesson++) {
-        if (schedule[lesson].equals(lesson)) return true
+    for (let lessonIndex=0; lessonIndex<schedule.length; lessonIndex++) {
+        if (schedule[lessonIndex].equals(lesson)) return true
     }
+    return false
 }
 
 /**
@@ -57,7 +58,9 @@ function mergeDaySchedules(a, b) {
         outSchedule.push(a[lesson])
     }
     for (let lesson=0; lesson<b.length; lesson++) {
-        if (!lessonInDaySchedule(outSchedule, b[lesson])) outSchedule.push(b[lesson])
+        let inSchedule = lessonInDaySchedule(outSchedule, b[lesson])
+        console.log(b[lesson].getTitle([])+" in a: "+inSchedule)
+        if (!inSchedule) outSchedule.push(b[lesson])
     }
     outSchedule.sort(scheduleSortFn)
     return outSchedule

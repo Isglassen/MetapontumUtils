@@ -73,15 +73,25 @@ async function loadSchedule(dataObj, schedulePath) {
 
     await loadSchedulePart(dataObj, schedulePath, true, tempSchedules, 0)
 
+    console.groupCollapsed("Merging Schedules")
+
+    console.log("Loaded first schedule")
     dataObj.schedule = tempSchedules[0]
 
     for (let schedule=1; schedule<tempSchedules.length; schedule++) {
+        console.groupCollapsed("Merge Schedule "+schedule+" into "+(schedule-1))
         for (let week=0; week<dataObj.schedule.length; week++) {
+            console.groupCollapsed("Merge week "+week)
             for (let day=0; day<dataObj.schedule[week].length; day++) {
+                console.groupCollapsed("Merge day "+day)
                 dataObj.schedule[week][day] = mergeDaySchedules(dataObj.schedule[week][day], tempSchedules[schedule][week][day])
+                console.groupEnd()
             }
+            console.groupEnd()
         }
+        console.groupEnd()
     }
+    console.groupEnd()
 }
 
 /**
