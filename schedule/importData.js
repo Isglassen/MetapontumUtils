@@ -75,11 +75,11 @@ async function loadSchedule(dataObj, schedulePath) {
 
     console.groupCollapsed("Merging Schedules")
 
-    console.log("Loaded first schedule")
+    console.log("Add Schedule 0 to Main")
     dataObj.schedule = tempSchedules[0]
 
     for (let schedule=1; schedule<tempSchedules.length; schedule++) {
-        console.groupCollapsed("Merge Schedule "+schedule+" into "+(schedule-1))
+        console.groupCollapsed("Merge Schedule "+schedule+" into Main")
         for (let week=0; week<dataObj.schedule.length; week++) {
             console.groupCollapsed("Merge week "+week)
             for (let day=0; day<dataObj.schedule[week].length; day++) {
