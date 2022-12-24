@@ -35,24 +35,29 @@ function scheduleSortFn(a, b) {
     return 0
 }
 
-function lessonInSchedule(schedule, lesson) {
-    for (let i=0; i<schedule.length; i++) {
-        if (schedule[i].equals(lesson)) return true
+/**
+ * @param {ScheduleEntry[]} schedule 
+ * @param {ScheduleEntry} lesson 
+ * @returns 
+ */
+function lessonInDaySchedule(schedule, lesson) {
+    for (let lesson=0; lesson<schedule.length; lesson++) {
+        if (schedule[lesson].equals(lesson)) return true
     }
 }
 
 /**
- * Returns a new schedule including both schedules
+ * Returns a new day schedule including both day schedules
  * @param {ScheduleEntry[]} a 
  * @param {ScheduleEntry[]} b 
  */
-function mergeSchedules(a, b) {
+function mergeDaySchedules(a, b) {
     let outSchedule = []
-    for (let i=0; i<a.length; i++) {
-        outSchedule.push(a[i])
+    for (let lesson=0; lesson<a.length; lesson++) {
+        outSchedule.push(a[lesson])
     }
-    for (let i=0; i<b.length; i++) {
-        if (!lessonInSchedule(outSchedule, b[i])) outSchedule.push(b[i])
+    for (let lesson=0; lesson<b.length; lesson++) {
+        if (!lessonInDaySchedule(outSchedule, b[lesson])) outSchedule.push(b[lesson])
     }
     outSchedule.sort(scheduleSortFn)
     return outSchedule
@@ -115,12 +120,24 @@ class ScheduleEntry {
         if (this.week !== other.week) return false
         if (this.weekday !== other.weekday) return false
         if (this.groups.length !== other.groups.length) return false
-        for (let i=0; i<this.groups.length; i++) {
-            if (!other.groups.includes(this.groups[i])) return false
+        for (let group=0; group<this.groups.length; group++) {
+            if (!other.groups.includes(this.groups[group])) return false
         }
         return true
     }
     
+    /**
+     * @param {string[]|string} groups 
+     * @param {string} name 
+     * @param {number} weekday (0-6 where 0 is Monday)
+     * @param {number} startHour (0-23)
+     * @param {number} startMinute (0-59)
+     * @param {number} endHour (0-23)
+     * @param {number} endMinute (0-59)
+     * @param {string} style CSS Style 
+     * @param {number} week Week index 
+     * @param {Date[]} seperators Indicates the start of each week 
+     */
     constructor(groups, name, weekday, startHour, startMinute, endHour, endMinute, style, week, seperators) {
         this.groups = Array.isArray(groups)? groups: [groups]
         this.name = name
@@ -138,28 +155,35 @@ class ScheduleEntry {
         this.styleData = style // The colors that should be used for the lesson, as html style tag data
     }
 
-    // Checks if this students group list is in this lessons list
+    /**
+     * Checks if this students group list is in this lessons list
+     * @param {string[]} groups The groups of the student
+     * @returns {boolean}
+     */
     studentHas(groups) {
         // If there is no group list then everyone matches
         if (this.groups.length == 0) return true
 
         // Simple loop of check every item in groups for each this.groups
         // return true if anything matches
-        for (let i=0; i<this.groups.length; i++) {
-            if (groups.includes(this.groups[i])) return true
+        for (let group=0; group<this.groups.length; group++) {
+            if (groups.includes(this.groups[group])) return true
         }
 
         return false
     }
 
-    // Get the lessons title
     // TODO: Exclude field to maybe not include the obvious 9A/9B for every lesson
+    /**
+     * Get the lessons title
+     * @param {string[]} excludeGroups Groups to not show in the title
+     * @returns {string}
+     */
     getTitle(excludeGroups) {
-
         let showGroups = []
-        for (let i=0; i<this.groups.length; i++) { 
-            if (Array.isArray(excludeGroups) && excludeGroups.includes(this.groups[i])) continue
-            showGroups.push(this.groups[i])
+        for (let group=0; group<this.groups.length; group++) { 
+            if (Array.isArray(excludeGroups) && excludeGroups.includes(this.groups[group])) continue
+            showGroups.push(this.groups[group])
         }
 
         if (showGroups.length == 0) return this.name
@@ -168,7 +192,8 @@ class ScheduleEntry {
 
     /**
      * Check if this is the current lesson
-     * @param {Date} date 
+     * @param {Date} date The current time
+     * @returns {boolean}
      */
     isCurrent(date) {
         const dateMilliseconds = date.getTime()
@@ -179,7 +204,13 @@ class ScheduleEntry {
         return true;
     }
 
-    // Get the string for this lesson
+    /**
+     * Get the string for this lesson
+     * @param {Date} date The current time
+     * @param {boolean} includeAfter Include lesson even if it is after that lesson 
+     * @param {string[]} excludeGroups Groups to not show in the title
+     * @returns {string}
+     */
     getString(date, includeAfter, excludeGroups) {
         if (this.isCurrent(date)) {
             // Current lesson string
@@ -197,7 +228,11 @@ class ScheduleEntry {
         return ""
     }
 
-    // Get a string for when the lesson is, instead of in how long
+    /**
+     * Get a string for when the lesson is, instead of in how long
+     * @param {string[]} excludeGroups Groups to not show in the title
+     * @returns {string}
+     */
     getTimeString(excludeGroups) {
         let tempDate = new Date()
         tempDate.setTime(this.startMilliseconds)
@@ -205,29 +240,56 @@ class ScheduleEntry {
     }
 }
 
+/**
+ * Add a group to the groupList
+ * @param {string[]} groupList List of groups
+ * @param {string} group The group to add 
+ */
 function addGroup(groupList, group) {
     if (!groupList.includes(group)) {
         groupList.push(group)
     }
 }
 
+/**
+ * Remove a group from the groupList
+ * @param {string[]} groupList List of groups
+ * @param {string} group The group to remove
+ */
 function removeGroup(groupList, group) {
     if (groupList.includes(group)) {
         groupList.splice(groupList.indexOf(group), 1)
     }
 }
 
+/**
+ * Get the date of a lesson
+ * @param {Date[]} seperators The start times of each week
+ * @param {number} week The week of the lesson 
+ * @param {number} weekday (0-6 where 0 is Monday) weekday of the lesson
+ * @returns {Date}
+ */
 function getLessonDate(seperators, week, weekday) {
     let date = new Date(seperators[week])
     date.setDate(date.getDate() + weekday-1)
     return date
 }
 
-// Get epoch since the start of the dates current day
+/**
+ * Get epoch since the start of the date's current day
+ * @param {Date} date 
+ * @returns {number} milliseconds
+ */
 function getInMilliseconds(date) {
     return date.getHours()*60*60*1000 + date.getMinutes()*60*1000 + date.getSeconds()*1000 + date.getMilliseconds()
 }
 
+/**
+ * Get the number week number of the date
+ * @param {Date[]} seperators The start times of each week
+ * @param {Date} date
+ * @returns {number?} Null when date is past week list, -1 when before
+ */
 function getThisWeekNum(seperators, date){
     let week = 0
     while (date.getTime() - seperators[week].getTime()>0) {
@@ -242,18 +304,32 @@ function getThisWeekNum(seperators, date){
     return week-1
 }
 
+/**
+ * The the week information for the date
+ * @param {ScheduleEntry[][][]} schedule All week information
+ * @param {Date[]} seperators The start times of each week
+ * @param {*} date 
+ * @returns {ScheduleEntry[][]?} Null when date is outside of week range
+ */
 function getThisWeek(schedule, seperators, date) {
     let week = getThisWeekNum(seperators, date)
     if (week ===null || week < 0) return null
     return schedule[week]
 }
 
+/**
+ * Get the next day, week, and data with schedule data for the date
+ * @param {ScheduleEntry[][][]} schedule All week information
+ * @param {Date[]} seperators The start times of each week
+ * @param {Date} date 
+ * @returns {[number, number, ScheduleEntry[]]} [0] is -1 if there is no next day with lessons, don't use any values if this is -1 or [2] is an empty array
+ */
 function getNextDayWeek(schedule, seperators, date) {
     // Initialise variables for the start of counting
     let week = getThisWeekNum(seperators, date)
     let weekday = 0
 
-    if (week === null) return ["",0,[]]
+    if (week === null) return [-1,0,[]]
 
     // If it's before this week, the next day is monday this week
     if (week<0) {
@@ -277,7 +353,7 @@ function getNextDayWeek(schedule, seperators, date) {
         if (weekday == 0) {
             week++
             // There is no next day
-            if (week>=schedule.length) return ["",0,[]]
+            if (week>=schedule.length) return [-1,0,[]]
         }
 
         weekday++
@@ -290,6 +366,13 @@ function getNextDayWeek(schedule, seperators, date) {
 }
 
 // Credit: https://chat.openai.com/chat
+
+/**
+ * Creates a cookie
+ * @param {string} name 
+ * @param {any} value Converted to string 
+ * @param {number?} days negative removes cookie, null sets no limit
+ */
 function createCookie(name, value, days) {
     // Encode the value to make sure it doesn't contain any special characters
     const encodedValue = encodeURIComponent(value);
@@ -309,6 +392,11 @@ function createCookie(name, value, days) {
     document.cookie = cookieString;
 }
 
+/**
+ * Gets a cookie value
+ * @param {string} name Name of the cookie
+ * @returns {string?} Null if cookie does not exist
+ */
 function getCookie(name) {
     // Use the 'decodeURIComponent' function to decode the value of the cookie
     const decodedCookie = decodeURIComponent(document.cookie);
@@ -317,8 +405,8 @@ function getCookie(name) {
     const pairs = decodedCookie.split(";");
 
     // Loop through the name-value pairs and return the value for the specified cookie name
-    for (let i = 0; i < pairs.length; i++) {
-        const pair = pairs[i].split("=");
+    for (let pairIndex = 0; pairIndex < pairs.length; pairIndex++) {
+        const pair = pairs[pairIndex].split("=");
         if (pair[0].trim() == name) {
             return pair[1];
         }

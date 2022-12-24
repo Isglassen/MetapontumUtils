@@ -91,14 +91,14 @@ $(document).ready(async function() {
     document.getElementById("scheduleName").innerHTML = currentSchedule
     document.head.innerHTML+=`<title>${currentSchedule} Schema</title>`
     groupSelectStr = ""
-    for (let i=0; i<allGroups.length; i++) {
-        let group = allGroups[i]
+    for (let groupIndex=0; groupIndex<allGroups.length; groupIndex++) {
+        let group = allGroups[groupIndex]
         groupSelectStr += `<br/><group-option data-name="${group}" data-selected="${groups.includes(group)? 1: 0}">${group}</group-option>`
     }
     document.getElementById("group_select").innerHTML += groupSelectStr
-    options = document.getElementsByTagName("group-option")
-    for (let i=0; i<options.length; i++) {
-        $(options[i]).click((e) => {
+    let groupOptions = document.getElementsByTagName("group-option")
+    for (let option=0; option<groupOptions.length; option++) {
+        $(groupOptions[option]).click((e) => {
             let target = e.delegateTarget
             if (!("selected" in target.dataset)) {
                 target.dataset.selected = "1"
@@ -134,20 +134,20 @@ function getToday(date) {
     let outFuture = ""
 
     // Add all lessons to the output
-    for (let i = 0; i < lessons.length; i++) {
-        if (!lessons[i].studentHas(groups)) continue
+    for (let lesson = 0; lesson < lessons.length; lesson++) {
+        if (!lessons[lesson].studentHas(groups)) continue
 
-        if (lessons[i].endMilliseconds < date.getTime()) {
-            outPrevious += lessons[i].getString(date, show_previous, [currentSchedule])
+        if (lessons[lesson].endMilliseconds < date.getTime()) {
+            outPrevious += lessons[lesson].getString(date, show_previous, [currentSchedule])
             continue
         }
 
-        if (lessons[i].isCurrent(date)) {
-            outCurrent += lessons[i].getString(date, show_previous, [currentSchedule])
+        if (lessons[lesson].isCurrent(date)) {
+            outCurrent += lessons[lesson].getString(date, show_previous, [currentSchedule])
             continue
         }
 
-        outFuture += lessons[i].getString(date, show_previous, [currentSchedule])
+        outFuture += lessons[lesson].getString(date, show_previous, [currentSchedule])
     }
 
     // If we added anything to a category, add a title
@@ -189,11 +189,11 @@ function getNextDay(date) {
     let outStr = ""
 
     // Add all lessons to the output
-    for (let i = 0; i < lessons.length; i++) {
-        if (!lessons[i].studentHas(groups)) continue
+    for (let lesson = 0; lesson < lessons.length; lesson++) {
+        if (!lessons[lesson].studentHas(groups)) continue
 
-        if (future_countdown) outStr += lessons[i].getString(date, show_previous, [currentSchedule])
-        else outStr += lessons[i].getTimeString([currentSchedule])
+        if (future_countdown) outStr += lessons[lesson].getString(date, show_previous, [currentSchedule])
+        else outStr += lessons[lesson].getTimeString([currentSchedule])
     }
     document.getElementById("nextDay").innerHTML = outStr
 

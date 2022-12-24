@@ -19,9 +19,9 @@ for child in soup.tr.children:
 rowSpans = []
 lessons: list[list[dict[str, str]]] = []
 
-for i in widths:
+for width in widths:
     obj = []
-    for i2 in range(i):
+    for _ in range(width):
         obj.append(0)
     rowSpans.append(obj)
     lessons.append([])
@@ -51,9 +51,9 @@ for tr in soup.children:
                 # print("Checking weekday "+str(weekday))
                 # print("Needs "+str(row))
                 subCol = 0
-                for i in col:
+                for width in col:
                     # print("SubCol "+str(subCol)+": "+str(i))
-                    if i == row:
+                    if width == row:
                         # print("Chose weekday "+str(weekday)+" subCol "+str(subCol))
                         end = True
                         break
@@ -62,8 +62,8 @@ for tr in soup.children:
                 weekday += 1
             
             # Add our new rows
-            for i in range(colspan):
-                rowSpans[weekday][subCol+i] += rowspan
+            for width in range(colspan):
+                rowSpans[weekday][subCol+width] += rowspan
                 # print(str(weekday)+":"+str(subCol+i)+" : "+str(rowSpans[weekday][subCol+i]))
 
             # Ignore empty space and weekday lables
