@@ -35,7 +35,7 @@ function render() {
         getNextDay(now)
     }
     catch(err) {
-        console.trace(err)
+        console.error(err)
         document.getElementById("current").innerHTML += "<kbd>Något gick fel. Datan var förmodligen dåligt formaterad. Vänligen kontakta utvecklaren</kbd>"
         return
     }
@@ -127,7 +127,7 @@ function getToday(date) {
     const week = getThisWeek(schedule, seperators, date);
     if (week === null) return
 
-    const lessons = week[date.getDay()-1]
+    const lessons = week[(date.getDay()-1<0? 6: date.getDay()-1)]
 
     let outPrevious = ""
     let outCurrent = ""
