@@ -13,6 +13,7 @@
 ### Kod (irellevant för användare)
 
 - Kanske importera automatiskt från schoolsoft (svårt)
+- Ta inte bort allt varje gång saker genereras, utan flytta så många objekt som möjligt (för att sedan kunna göra CSS animationer)
 
 ## If you want to contribute
 
