@@ -1,0 +1,16 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "$id": "https://isglassen.github.io/MetapontumUtils/schema/scheduleContainer",
+    "oneOf": [
+        { "$ref": "./schedule" },
+        {
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    { "$ref": "./schedule" },
+                    { "type": "string", "description": "Path to other schedule" }
+                ]
+            }
+        }
+    ]
+}

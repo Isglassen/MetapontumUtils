@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "$id": "https://isglassen.github.io/MetapontumUtils/schema/schedule",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Name of the schedule"
+        },
+        "schedule": {
+            "type": "array",
+            "items": {
+                "type": "array",
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": [
+                            { "type": "string", "description": "group" },
+                            { "type": "string", "description": "lesson name" },
+                            { "type": "number", "description": "weekday (0=monday)" },
+                            { "type": "number", "description": "start hour" },
+                            { "type": "number", "description": "start minute" },
+                            { "type": "number", "description": "end hour" },
+                            { "type": "number", "description": "end minute" },
+                            { "type": "string", "description": "style" }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}

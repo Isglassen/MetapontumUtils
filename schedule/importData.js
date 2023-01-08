@@ -43,7 +43,7 @@ async function loadSchedulePart(dataObj, schedulePath, firstItr, tempSchedules, 
              */
             // @ts-ignore
             let otherPath = data[schedule]
-            console.group("Importing schedule from "+data[schedule])
+            console.group("Importing schedule from "+otherPath)
             await loadSchedulePart(dataObj, otherPath, false, tempSchedules, schedule+offset)
             console.groupEnd()
             continue
