@@ -6,8 +6,8 @@ import json
 readPath = Path(__file__).parent / "htmlData.html"
 jsonPath = Path(__file__).parent / "scheduleJSON.json"
 
-with readPath.open("r") as f:
-    soup = BeautifulSoup(f, features="html.parser").tbody
+with readPath.open("r", encoding="utf-8") as f:
+    soup = BeautifulSoup(f, features="lxml").tbody
 
 widths = [];
 _first_row = True
