@@ -59,7 +59,7 @@ function mergeDaySchedules(a, b) {
     }
     for (let lesson=0; lesson<b.length; lesson++) {
         let inSchedule = lessonInDaySchedule(outSchedule, b[lesson])
-        console.log(b[lesson].getTitle([])+" in a: "+inSchedule)
+        console.log("("+b[lesson].getStartTimeString()+") "+b[lesson].getTitle([])+" in a: "+inSchedule)
         if (!inSchedule) outSchedule.push(b[lesson])
     }
     outSchedule.sort(scheduleSortFn)
@@ -237,9 +237,13 @@ class ScheduleEntry {
      * @returns {string}
      */
     getTimeString(excludeGroups) {
+        return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> kl. <b>${this.getStartTimeString()}</b><br></span>`
+    }
+
+    getStartTimeString() {
         let tempDate = new Date()
         tempDate.setTime(this.startMilliseconds)
-        return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> kl. <b>${toTimeString(getInMilliseconds(tempDate), Math.floor, false)}</b><br></span>`
+        return toTimeString(getInMilliseconds(tempDate), Math.floor, false)
     }
 }
 
