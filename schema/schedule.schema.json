@@ -22,8 +22,8 @@
                         "items": [
                             { 
                                 "oneOf": [
-                                    {"type": "string", "description": "group", "pattern": "^[^|]+$" },
-                                    {"type": "array", "description": "group list", "items": { "type": "string", "pattern": "^[^|]+$" } }
+                                    {"type": "string", "description": "group" },
+                                    {"type": "array", "description": "group list", "items": { "type": "string" } }
                                 ]
                             },
                             { "type": "string", "description": "lesson name" },
