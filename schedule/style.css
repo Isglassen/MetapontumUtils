@@ -36,8 +36,9 @@ div:has(button.link-button) {
 
 button {
     margin-left: -0.5mm;
-    background-color: lightgray;
+    background-color: darkgray ;
     border: 0.5mm solid black;
+    color: black;
 }
 
 button.disabled {
