@@ -5,9 +5,9 @@ const groupURISeperator = "|"
 let URIparams = new Proxy(new URLSearchParams(window.location.search), {
     get: (searchParams, prop) => searchParams.get(prop),
 });
+
 let URIgroupString = URIparams.groups
-let URIgroups
-URIgroups = (URIgroupString !== null? decodeGroups(URIgroupString, groupURISeperator): null)
+let URIgroups = (URIgroupString !== null? decodeGroups(URIgroupString, URIparams.seperator === null? groupURISeperator: URIparams.seperator): null)
 
 let testTime = null
 let run_scripts = true
@@ -18,11 +18,11 @@ if (URIgroups !== null) groups = URIgroups
 let loaded = false
 let future_countdown = getCookie("future_countdown") === "1"
 
-function getPermanentLink(groupList=groups) {
-    let encodedGroups = encodeGroups(groupList, groupURISeperator)
+function getPermanentLink(groupList=groups, seperator=groupURISeperator) {
+    let encodedGroups = encodeGroups(groupList, seperator)
     if (encodedGroups === null) return null
     return window.location.origin + window.location.pathname + '?groups=' +
-        encodeURIComponent(encodedGroups)
+        encodeURIComponent(encodedGroups) + "&seperator=" + encodeURIComponent(seperator)
 }
 
 // Refresh all dynamic fields
