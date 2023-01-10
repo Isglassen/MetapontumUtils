@@ -88,10 +88,10 @@ $(document).ready(async function() {
     console.groupEnd();
     console.log("Loaded");
 
-    let groupList = settings.get("groups")
-    if (!currentSchedule.startsWith("__")) { if (!(currentSchedule === "")) addGroup(groupList, currentSchedule) }
+    if (!currentSchedule.startsWith("__")) {
+        if (!(currentSchedule === "")) settings.modify("groups", (val) => {addGroup(val, currentSchedule); return val})
+    }
     if (currentSchedule.startsWith("__")) currentSchedule = currentSchedule.substring(2)
-    settings.set("groups", groupList)
     document.getElementById("scheduleName").innerHTML = currentSchedule
     document.head.innerHTML+=`<title>${currentSchedule} Schema</title>`
     let groupSelectStr = ""
@@ -106,22 +106,16 @@ $(document).ready(async function() {
             let target = e.delegateTarget
             if (!("selected" in target.dataset)) {
                 target.dataset.selected = "1"
-                let groupList = settings.get("groups")
-                addGroup(groupList, target.dataset.name)
-                settings.set("groups", groupList)
+                settings.modify("groups", (val) => {addGroup(val, target.dataset.name);return val})
                 return
             }
             if (target.dataset.selected == "1") {
                 target.dataset.selected = "0"
-                let groupList = settings.get("groups")
-                removeGroup(groupList, target.dataset.name)
-                settings.set("groups", groupList)
+                settings.modify("groups", (val) => {removeGroup(val, target.dataset.name);return val})
                 return
             }
             target.dataset.selected = "1"
-            let groupList = settings.get("groups")
-            addGroup(groupList, target.dataset.name)
-            settings.set("groups", groupList)
+            settings.modify("groups", (val) => {addGroup(val, target.dataset.name);return val})
         })
     }
 

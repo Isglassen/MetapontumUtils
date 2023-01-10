@@ -65,6 +65,9 @@ class Setting {
         this.value = value
         return true
     }
+    modify(transformFunction) {
+        this.value = transformFunction(this.value)
+    }
     getURIComponent() {
         return encodeURIComponent(this.queryParam.name) + "=" +
         encodeURIComponent(this.queryParam.encode(this.value))
@@ -141,6 +144,9 @@ class Settings {
             )
         }
         return window.location.origin + window.location.pathname + '?' + settingStrings.join("&")
+    }
+    modify(name, transformFunction) {
+        this.values[name].modify(transformFunction)
     }
 }
 
