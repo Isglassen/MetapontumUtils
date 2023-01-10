@@ -11,7 +11,7 @@ function addWeek(scheduleWeek, weekData, weekNum, dataObj) {
         scheduleWeek[dayIndex] = []
         for (let lessonIndex=0; lessonIndex<day.length; lessonIndex++){
             let lesson = day[lessonIndex]
-            scheduleWeek[dayIndex][lessonIndex] = new ScheduleEntry(lesson[0], lesson[1], lesson[2], lesson[3], lesson[4], lesson[5], lesson[6], lesson[7], weekNum, dataObj.seperators)
+            scheduleWeek[dayIndex][lessonIndex] = new ScheduleEntry(Array.isArray(lesson[0])?lesson[0]:[lesson[0]], lesson[1], lesson[2], lesson[3], lesson[4], lesson[5], lesson[6], lesson[7], weekNum, dataObj.seperators)
             for (let group=0; group<scheduleWeek[dayIndex][lessonIndex].groups.length; group++) {
                 addGroup(dataObj.allGroups, scheduleWeek[dayIndex][lessonIndex].groups[group])
             }

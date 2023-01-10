@@ -16,7 +16,12 @@
                     "items": {
                         "type": "array",
                         "items": [
-                            { "type": "string", "description": "group" },
+                            { 
+                                "oneOf": [
+                                    {"type": "string", "description": "group" },
+                                    {"type": "array", "description": "group list", "items": { "type": "string" } }
+                                ]
+                            },
                             { "type": "string", "description": "lesson name" },
                             { "type": "number", "description": "weekday (0=monday)" },
                             { "type": "number", "description": "start hour" },
