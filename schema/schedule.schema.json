@@ -34,10 +34,13 @@
                             { "type": "number", "description": "start minute" },
                             { "type": "number", "description": "end hour" },
                             { "type": "number", "description": "end minute" },
-                            { "anyOf": [
-                                { "type": "string" },
-                                { "type": "null" }
-                            ], "description": "style" }
+                            {
+                                "description": "style",
+                                "anyOf": [
+                                    { "type": "string" },
+                                    { "type": "null" }
+                                ]
+                            }
                         ]
                     }
                 }
