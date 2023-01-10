@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/schema",
-    "$id": "https://isglassen.github.io/MetapontumUtils/schema/schedule",
+    "$id": "https://isglassen.github.io/MetapontumUtils/schema/schedule.schema.json",
     "type": "object",
     "properties": {
         "name": {
