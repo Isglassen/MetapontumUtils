@@ -18,8 +18,8 @@ if (URIgroups !== null) groups = URIgroups
 let loaded = false
 let future_countdown = getCookie("future_countdown") === "1"
 
-function getPermanentLink() {
-    let encodedGroups = encodeGroups(groups, groupURISeperator)
+function getPermanentLink(groupList=groups) {
+    let encodedGroups = encodeGroups(groupList, groupURISeperator)
     if (encodedGroups === null) return null
     return window.location.origin + window.location.pathname + '?groups=' +
         encodeURIComponent(encodedGroups)
