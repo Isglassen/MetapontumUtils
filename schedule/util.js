@@ -365,8 +365,8 @@ class ScheduleEntry {
      * @param {string[]} excludeGroups Groups to not show in the title
      * @returns {string}
      */
-    getTimeString(excludeGroups) {
-        return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> kl. <b>${this.getStartTimeString()}</b><br></span>`
+    getTimeString(excludeGroups, endTime) {
+        return `<span style="${this.styleData}"><b>${this.getTitle(excludeGroups)}</b> kl. <b>${this.getStartTimeString()}</b>${endTime? ` - <b>${this.getEndTimeString()}</b>`: ''}<br></span>`
     }
 
     getStartTimeString() {

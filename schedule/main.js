@@ -6,7 +6,8 @@ let run_scripts = true
 
 settings.addSetting("groups", settings.jsonType.copy("student_groups"), settings.jsonType.copy("groups"), [])
 settings.addSetting("showPrevious", settings.boolType.copy("show_previous"), settings.boolType.copy("showPrevious"), false)
-settings.addSetting("futureCountdown", settings.boolType.copy("future_countdown"), settings.boolType.copy("futureCountdown"), false)
+settings.addSetting("countdown", settings.boolType.copy("countdown"), settings.boolType.copy("countdown"), true)
+settings.addSetting("showStartEnd", settings.boolType.copy("show_start_end"), settings.boolType.copy("showStartEnd"), true)
 
 // Refresh all dynamic fields
 function render() {
@@ -45,22 +46,25 @@ function render() {
 }
 
 let allGroups, schedule, currentSchedule, seperators
+let permalinkMessageTimeout
 
 $(document).ready(async function() {
     // Add generic content for all pages
     document.body.innerHTML+='<h1>Metapontum <span id="scheduleName"></span> Schema <span id="date"></span> kl. <span id="time">00:00:00</span></h1><p>För tillfället använder vi namnen direkt från schoolsoft, men detta går att ändra om vi vill</p>'
     document.body.innerHTML+='<h2 id="previousTitle"></h2><p class="lessons" id="previous"></p><h2 id="currentTitle"></h2><p class="lessons" id="current"><kbd>Laddar...</kbd></p><h2 id="laterTitle"></h2><p class="lessons" id="later"></p><h2 id="nextDayTitle"></h2><p class="lessons" id="nextDay"></p>'
-    document.body.innerHTML+='<h2><kbd>Stoppa Script</kbd> är användbart för att kopiera text</h2><button id="toggle_scripts"></button><button id="toggle_previous"></button><button id="toggle_future_countdown"></button>'
+    document.body.innerHTML+='<h2><kbd>Stoppa Script</kbd> är användbart för att kopiera text</h2><button id="toggle_scripts"></button><button id="toggle_previous"></button><button id="toggle_countdown"></button><button id="toggle_start_end"></button><br/><button id="permalink"></button>'
     document.body.innerHTML+='<br/><p>Grupper: </p><div id="group_select"></div>'
     document.body.innerHTML+='<br/><br/>Inställningar är: <kbd>Visa Tidigare</kbd>, <kbd>Grupper</kbd>, <kbd>Visning av nästa dag</kbd><br/><button id="cookie_save">Spara inställningar (cookies)</button><button id="cookie_remove">Glöm cookies</button>'
 
     // Set button names
-    try {
-        document.getElementById("toggle_scripts").innerHTML = run_scripts? "Stoppa Script": "Starta Script"
-        document.getElementById("toggle_previous").innerHTML = settings.get("showPrevious")? "Dölj Tidigare": "Visa Tidigare"
-        document.getElementById("toggle_future_countdown").innerHTML = settings.get("futureCountdown")? "Visa klockslag för nästa dag": "Visa nedräkningar för nästa dag"
-    } catch(err) {
-        console.error(err)
+    document.getElementById("toggle_scripts").innerHTML = run_scripts? "Stoppa Script": "Starta Script"
+    document.getElementById("toggle_previous").innerHTML = settings.get("showPrevious")? "Dölj Tidigare": "Visa Tidigare"
+    document.getElementById("toggle_countdown").innerHTML = settings.get("countdown")? "Visa klockslag": "Visa nedräkningar"
+    document.getElementById("toggle_start_end").innerHTML = settings.get("showStartEnd")? "Dölj Sluttider": "Visa Sluttider"
+    document.getElementById("permalink").innerHTML = "Länk med inställningar"
+    if (settings.get("countdown")) {
+        document.getElementById("toggle_start_end").innerHTML = "Går inte med nedräkningar (än?)"
+        document.getElementById("toggle_start_end").classList.toggle("disabled")
     }
 
     // Add callbacks to buttons
@@ -69,12 +73,38 @@ $(document).ready(async function() {
         document.getElementById("toggle_scripts").innerHTML = run_scripts? "Stoppa Script": "Starta Script"
     })
     $("#toggle_previous").click(() => {
-        settings.set("showPrevious", !settings.get("showPrevious"))
+        settings.modify("showPrevious", (val)=>!val)
         document.getElementById("toggle_previous").innerHTML = settings.get("showPrevious")? "Dölj Tidigare": "Visa Tidigare"
     })
-    $("#toggle_future_countdown").click(() => {
-        settings.set("futureCountdown", !settings.get("futureCountdown"))
-        document.getElementById("toggle_future_countdown").innerHTML = settings.get("futureCountdown")? "Visa klockslag för nästa dag": "Visa nedräkningar för nästa dag"
+    $("#toggle_countdown").click(() => {
+        settings.modify("countdown", (val)=>!val)
+
+        document.getElementById("toggle_start_end").classList.toggle("disabled")
+        if (settings.get("countdown")) {
+            document.getElementById("toggle_start_end").innerHTML = "Går inte med nedräkningar (än?)"
+        } else {
+            document.getElementById("toggle_start_end").innerHTML = settings.get("showStartEnd")? "Dölj Sluttider": "Visa Sluttider"
+        }
+
+        document.getElementById("toggle_countdown").innerHTML = settings.get("countdown")? "Visa klockslag": "Visa nedräkningar"
+    })
+    $("#toggle_start_end").click(() => {
+        settings.modify("showStartEnd", (val)=>!val)
+        if (!settings.get("countdown")) document.getElementById("toggle_start_end").innerHTML = settings.get("showStartEnd")? "Dölj Sluttider": "Visa Sluttider"
+    })
+    $("#permalink").click(() => {
+        if (!document.getElementById("permalink").classList.contains("disabled"))
+        try {
+            navigator.clipboard.writeText(settings.generateLink())
+            setTimeout(()=>{
+                document.getElementById("permalink").innerHTML = "Länk med inställningar"; 
+                document.getElementById("permalink").classList.remove("disabled")
+            }, 500)
+            document.getElementById("permalink").innerHTML = "Kopierad!"
+            document.getElementById("permalink").classList.add("disabled")
+        } catch(err) {
+            console.warn(err)
+        }
     })
     $("#cookie_save").click(() => {
         settings.saveCookies()
@@ -137,21 +167,23 @@ function getToday(date) {
     let outCurrent = ""
     let outFuture = ""
 
+    let countdown = settings.get("countdown")
+
     // Add all lessons to the output
     for (let lesson = 0; lesson < lessons.length; lesson++) {
         if (!lessons[lesson].studentHas(settings.get("groups"))) continue
 
         if (lessons[lesson].endMilliseconds < date.getTime()) {
-            outPrevious += lessons[lesson].getString(date, settings.get("showPrevious"), [currentSchedule])
+            outPrevious += countdown? lessons[lesson].getString(date, settings.get("showPrevious"), [currentSchedule]): lessons[lesson].getTimeString([currentSchedule], settings.get("showStartEnd"))
             continue
         }
 
         if (lessons[lesson].isCurrent(date)) {
-            outCurrent += lessons[lesson].getString(date, settings.get("showPrevious"), [currentSchedule])
+            outCurrent += countdown? lessons[lesson].getString(date, settings.get("showPrevious"), [currentSchedule]): lessons[lesson].getTimeString([currentSchedule], settings.get("showStartEnd"))
             continue
         }
 
-        outFuture += lessons[lesson].getString(date, settings.get("showPrevious"), [currentSchedule])
+        outFuture += countdown? lessons[lesson].getString(date, settings.get("showPrevious"), [currentSchedule]): lessons[lesson].getTimeString([currentSchedule], settings.get("showStartEnd"))
     }
 
     // If we added anything to a category, add a title
@@ -196,8 +228,8 @@ function getNextDay(date) {
     for (let lesson = 0; lesson < lessons.length; lesson++) {
         if (!lessons[lesson].studentHas(settings.get("groups"))) continue
 
-        if (settings.get("futureCountdown")) outStr += lessons[lesson].getString(date, settings.get("showPrevious"), [currentSchedule])
-        else outStr += lessons[lesson].getTimeString([currentSchedule])
+        if (settings.get("countdown")) outStr += lessons[lesson].getString(date, settings.get("showPrevious"), [currentSchedule])
+        else outStr += lessons[lesson].getTimeString([currentSchedule], settings.get("showStartEnd"))
     }
     document.getElementById("nextDay").innerHTML = outStr
 

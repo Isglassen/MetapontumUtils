@@ -5,6 +5,8 @@ body {
 .lessons span {
     width: fit-content;
     border: 1px solid black;
+    padding-right: 1mm;
+    padding-left: 0.5mm;
 }
 
 group-option {
@@ -32,7 +34,12 @@ div:has(button.link-button) {
     width: fit-content;
 }
 
-button.link-button {
-    background-color: white;
-    font-size: xx-large;
+button {
+    margin-left: -0.5mm;
+    background-color: lightgray;
+    border: 0.5mm solid black;
+}
+
+button.disabled {
+    background-color: gray;
 }
