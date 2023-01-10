@@ -12,6 +12,8 @@
   - Finns nu, men kanske behöver förbättras
 - Modifera lite detaljer som schoolsoft har fel, så som schemabrytande eller fel grupper
   - Påbörjat med en 9A extra S för Ma3c lektionen
+- Visa klockslag/nedräkningar för alla lektioner basserat på inställningen
+- Intällning för att vissa start och slut för en lektion samtidigt (Åtminstone för klockslag)
 
 ### Kod (irellevant för användare)
 
