@@ -8,7 +8,10 @@
 
 ## Planerat
 
-- Kombinera alla scheman till 1 länk (Finns nu, men kanske behöver förbättras)
+- Kombinera alla scheman till 1 länk
+  - Finns nu, men kanske behöver förbättras
+- Modifera lite detaljer som schoolsoft har fel, så som schemabrytande eller fel grupper
+  - Påbörjat med en 9A extra S för Ma3c lektionen
 
 ### Kod (irellevant för användare)
 

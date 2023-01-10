@@ -14,7 +14,7 @@
                 ["Mspr Ty 9", "Mspr Ty", 0, 14, 30, 15, 30, "background-color:#ffffff; color:#000000"],
                 ["Mspr Fra 9", "Mspr Fr", 0, 14, 30, 15, 30, "background-color:#21d5f8; color:#000000; "],
                 ["Mspr En", "En", 0, 14, 30, 15, 10, "background-color:#ba5c0f; color:#000000; "],
-                ["9A S", "Ma3c", 0, 15, 45, 16, 45, "background-color:#1b64fa; color:#000000; "]
+                ["9A extra S", "Ma3c", 0, 15, 45, 16, 45, "background-color:#1b64fa; color:#000000; "]
             ],
             [
                 ["9A", "Bi", 1, 8, 0, 8, 40, "background-color:#43ffc9; color:#000000; "],
@@ -83,7 +83,7 @@
                 ["Mspr Ty 9", "Mspr Ty", 0, 14, 30, 15, 30, "background-color:#ffffff; color:#000000"],
                 ["Mspr Fra 9", "Mspr Fr", 0, 14, 30, 15, 30, "background-color:#21d5f8; color:#000000; "],
                 ["Mspr En", "En", 0, 14, 30, 15, 10, "background-color:#ba5c0f; color:#000000; "],
-                ["9A S", "Ma3c", 0, 15, 45, 16, 45, "background-color:#1b64fa; color:#000000; "]
+                ["9A extra S", "Ma3c", 0, 15, 45, 16, 45, "background-color:#1b64fa; color:#000000; "]
             ],
             [
                 ["9A", "Bi", 1, 8, 0, 8, 40, "background-color:#43ffc9; color:#000000; "],
@@ -152,7 +152,7 @@
                 ["Mspr Ty 9", "Mspr Ty", 0, 14, 30, 15, 30, "background-color:#ffffff; color:#000000"],
                 ["Mspr Fra 9", "Mspr Fr", 0, 14, 30, 15, 30, "background-color:#21d5f8; color:#000000; "],
                 ["Mspr En", "En", 0, 14, 30, 15, 10, "background-color:#ba5c0f; color:#000000; "],
-                ["9A S", "Ma3c", 0, 15, 45, 16, 45, "background-color:#1b64fa; color:#000000; "]
+                ["9A extra S", "Ma3c", 0, 15, 45, 16, 45, "background-color:#1b64fa; color:#000000; "]
             ],
             [
                 ["9A", "Bi", 1, 8, 0, 8, 40, "background-color:#43ffc9; color:#000000; "],
