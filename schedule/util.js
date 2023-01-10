@@ -48,6 +48,31 @@ function lessonInDaySchedule(schedule, lesson) {
 }
 
 /**
+ * Convert a group list into groups seperated by seperator
+ * @param {string[]} groups 
+ * @param {string} seperator 
+ * @returns {string?} returns null when a group name includes the seperator
+ */
+function encodeGroups(groups, seperator) {
+    for (let i=0; i<groups.length; i++) {
+        if (groups[i].includes(seperator)) return null
+    }
+    let groupString = groups.join(seperator)
+    return groupString
+}
+
+/**
+ * Convert group names seperated by seperator into a list of groups
+ * @param {string} groupString 
+ * @param {string} seperator 
+ * @returns {string[]}
+ */
+function decodeGroups(groupString, seperator) {
+    let groups = groupString.split(seperator)
+    return groups
+}
+
+/**
  * Returns a new day schedule including both day schedules
  * @param {ScheduleEntry[]} a 
  * @param {ScheduleEntry[]} b 

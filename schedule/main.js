@@ -1,12 +1,29 @@
 // @ts-nocheck
 
+const groupURISeperator = "|"
+
+let URIparams = new Proxy(new URLSearchParams(window.location.search), {
+    get: (searchParams, prop) => searchParams.get(prop),
+});
+let URIgroupString = URIparams.groups
+let URIgroups
+URIgroups = (URIgroupString !== null? decodeGroups(URIgroupString, groupURISeperator): null)
+
 let testTime = null
 let run_scripts = true
 let show_previous = getCookie("show_previous") === "1"
 let groups = JSON.parse(getCookie("student_groups"))
 if (groups === null) groups = []
+if (URIgroups !== null) groups = URIgroups
 let loaded = false
 let future_countdown = getCookie("future_countdown") === "1"
+
+function getPermanentLink() {
+    let encodedGroups = encodeGroups(groups, groupURISeperator)
+    if (encodedGroups === null) return null
+    return window.location.origin + window.location.pathname + '?groups=' +
+        encodeURIComponent(encodedGroups)
+}
 
 // Refresh all dynamic fields
 function render() {
@@ -86,7 +103,7 @@ $(document).ready(async function() {
     console.log("Loaded");
     console.groupEnd();
 
-    if (!currentSchedule.startsWith("__")) addGroup(groups, currentSchedule)
+    if (!currentSchedule.startsWith("__")) { if (!currentSchedule === "") addGroup(groups, currentSchedule) }
     if (currentSchedule.startsWith("__")) currentSchedule = currentSchedule.substring(2)
     document.getElementById("scheduleName").innerHTML = currentSchedule
     document.head.innerHTML+=`<title>${currentSchedule} Schema</title>`
