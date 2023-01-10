@@ -1,29 +1,12 @@
-// @ts-nocheck
+//@ts-nocheck
 
-const groupURISeperator = "|"
-
-let URIparams = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop) => searchParams.get(prop),
-});
-
-let URIgroupString = URIparams.groups
-let URIgroups = (URIgroupString !== null? decodeGroups(URIgroupString, URIparams.seperator === null? groupURISeperator: URIparams.seperator): null)
-
+const settings = new Settings()
 let testTime = null
 let run_scripts = true
-let show_previous = getCookie("show_previous") === "1"
-let groups = JSON.parse(getCookie("student_groups"))
-if (groups === null) groups = []
-if (URIgroups !== null) groups = URIgroups
-let loaded = false
-let future_countdown = getCookie("future_countdown") === "1"
 
-function getPermanentLink(groupList=groups, seperator=groupURISeperator) {
-    let encodedGroups = encodeGroups(groupList, seperator)
-    if (encodedGroups === null) return null
-    return window.location.origin + window.location.pathname + '?groups=' +
-        encodeURIComponent(encodedGroups) + "&seperator=" + encodeURIComponent(seperator)
-}
+settings.addSetting("groups", settings.jsonType.copy("student_groups"), settings.jsonType.copy("groups"), [])
+settings.addSetting("showPrevious", settings.boolType.copy("show_previous"), settings.boolType.copy("showPrevious"), false)
+settings.addSetting("futureCountdown", settings.boolType.copy("future_countdown"), settings.boolType.copy("futureCountdown"), false)
 
 // Refresh all dynamic fields
 function render() {
@@ -61,6 +44,8 @@ function render() {
     if (testTime !== null) testTime.setMilliseconds(testTime.getMilliseconds()+500)
 }
 
+let allGroups, schedule, currentSchedule, seperators
+
 $(document).ready(async function() {
     // Add generic content for all pages
     document.body.innerHTML+='<h1>Metapontum <span id="scheduleName"></span> Schema <span id="date"></span> kl. <span id="time">00:00:00</span></h1><p>För tillfället använder vi namnen direkt från schoolsoft, men detta går att ändra om vi vill</p>'
@@ -70,9 +55,13 @@ $(document).ready(async function() {
     document.body.innerHTML+='<br/><br/>Inställningar är: <kbd>Visa Tidigare</kbd>, <kbd>Grupper</kbd>, <kbd>Visning av nästa dag</kbd><br/><button id="cookie_save">Spara inställningar (cookies)</button><button id="cookie_remove">Glöm cookies</button>'
 
     // Set button names
-    document.getElementById("toggle_scripts").innerHTML = run_scripts? "Stoppa Script": "Starta Script"
-    document.getElementById("toggle_previous").innerHTML = show_previous? "Dölj Tidigare": "Visa Tidigare"
-    document.getElementById("toggle_future_countdown").innerHTML = future_countdown? "Visa klockslag för nästa dag": "Visa nedräkningar för nästa dag"
+    try {
+        document.getElementById("toggle_scripts").innerHTML = run_scripts? "Stoppa Script": "Starta Script"
+        document.getElementById("toggle_previous").innerHTML = settings.get("showPrevious")? "Dölj Tidigare": "Visa Tidigare"
+        document.getElementById("toggle_future_countdown").innerHTML = settings.get("futureCountdown")? "Visa klockslag för nästa dag": "Visa nedräkningar för nästa dag"
+    } catch(err) {
+        console.error(err)
+    }
 
     // Add callbacks to buttons
     $("#toggle_scripts").click(() => {
@@ -80,22 +69,18 @@ $(document).ready(async function() {
         document.getElementById("toggle_scripts").innerHTML = run_scripts? "Stoppa Script": "Starta Script"
     })
     $("#toggle_previous").click(() => {
-        show_previous = !show_previous
-        document.getElementById("toggle_previous").innerHTML = show_previous? "Dölj Tidigare": "Visa Tidigare"
+        settings.set("showPrevious", !settings.get("showPrevious"))
+        document.getElementById("toggle_previous").innerHTML = settings.get("showPrevious")? "Dölj Tidigare": "Visa Tidigare"
     })
     $("#toggle_future_countdown").click(() => {
-        future_countdown = !future_countdown
-        document.getElementById("toggle_future_countdown").innerHTML = future_countdown? "Visa klockslag för nästa dag": "Visa nedräkningar för nästa dag"
+        settings.set("futureCountdown", !settings.get("futureCountdown"))
+        document.getElementById("toggle_future_countdown").innerHTML = settings.get("futureCountdown")? "Visa klockslag för nästa dag": "Visa nedräkningar för nästa dag"
     })
     $("#cookie_save").click(() => {
-        createCookie("show_previous", +show_previous)
-        createCookie("student_groups", JSON.stringify(groups))
-        createCookie("future_countdown", +future_countdown)
+        settings.saveCookies()
     })
     $("#cookie_remove").click(() => {
-        createCookie("show_previous", null, -1)
-        createCookie("student_groups", null, -1)
-        createCookie("future_countdown", null, -1)
+        settings.removeCookies()
     })
 
     console.group("Loading");
@@ -103,14 +88,16 @@ $(document).ready(async function() {
     console.log("Loaded");
     console.groupEnd();
 
-    if (!currentSchedule.startsWith("__")) { if (!currentSchedule === "") addGroup(groups, currentSchedule) }
+    let groupList = settings.get("groups")
+    if (!currentSchedule.startsWith("__")) { if (!(currentSchedule === "")) addGroup(groupList, currentSchedule) }
     if (currentSchedule.startsWith("__")) currentSchedule = currentSchedule.substring(2)
+    settings.set("groups", groupList)
     document.getElementById("scheduleName").innerHTML = currentSchedule
     document.head.innerHTML+=`<title>${currentSchedule} Schema</title>`
-    groupSelectStr = ""
+    let groupSelectStr = ""
     for (let groupIndex=0; groupIndex<allGroups.length; groupIndex++) {
         let group = allGroups[groupIndex]
-        groupSelectStr += `<br/><group-option data-name="${group}" data-selected="${groups.includes(group)? 1: 0}">${group}</group-option>`
+        groupSelectStr += `<br/><group-option data-name="${group}" data-selected="${settings.get("groups").includes(group)? 1: 0}">${group}</group-option>`
     }
     document.getElementById("group_select").innerHTML += groupSelectStr
     let groupOptions = document.getElementsByTagName("group-option")
@@ -119,16 +106,22 @@ $(document).ready(async function() {
             let target = e.delegateTarget
             if (!("selected" in target.dataset)) {
                 target.dataset.selected = "1"
-                addGroup(groups, target.dataset.name)
+                let groupList = settings.get("groups")
+                addGroup(groupList, target.dataset.name)
+                settings.set("groups", groupList)
                 return
             }
             if (target.dataset.selected == "1") {
                 target.dataset.selected = "0"
-                removeGroup(groups, target.dataset.name)
+                let groupList = settings.get("groups")
+                removeGroup(groupList, target.dataset.name)
+                settings.set("groups", groupList)
                 return
             }
             target.dataset.selected = "1"
-            addGroup(groups, target.dataset.name)
+            let groupList = settings.get("groups")
+            addGroup(groupList, target.dataset.name)
+            settings.set("groups", groupList)
         })
     }
 
@@ -152,23 +145,23 @@ function getToday(date) {
 
     // Add all lessons to the output
     for (let lesson = 0; lesson < lessons.length; lesson++) {
-        if (!lessons[lesson].studentHas(groups)) continue
+        if (!lessons[lesson].studentHas(settings.get("groups"))) continue
 
         if (lessons[lesson].endMilliseconds < date.getTime()) {
-            outPrevious += lessons[lesson].getString(date, show_previous, [currentSchedule])
+            outPrevious += lessons[lesson].getString(date, settings.get("showPrevious"), [currentSchedule])
             continue
         }
 
         if (lessons[lesson].isCurrent(date)) {
-            outCurrent += lessons[lesson].getString(date, show_previous, [currentSchedule])
+            outCurrent += lessons[lesson].getString(date, settings.get("showPrevious"), [currentSchedule])
             continue
         }
 
-        outFuture += lessons[lesson].getString(date, show_previous, [currentSchedule])
+        outFuture += lessons[lesson].getString(date, settings.get("showPrevious"), [currentSchedule])
     }
 
     // If we added anything to a category, add a title
-    if (outPrevious.length > 0 && show_previous) {
+    if (outPrevious.length > 0 && settings.get("showPrevious")) {
         document.getElementById("previousTitle").innerHTML = "Tidigare:"
         document.getElementById("previous").innerHTML = outPrevious
     }
@@ -198,7 +191,7 @@ function getNextDay(date) {
     ]
 
     // Get when the next day with lessons actually is
-    const weekAndDay = getNextDayWeek(schedule, seperators, date, currentSchedule)
+    const weekAndDay = getNextDayWeek(schedule, seperators, date)
     const week = weekAndDay[0]
     const weekday = weekAndDay[1]
     const lessons = weekAndDay[2]
@@ -207,9 +200,9 @@ function getNextDay(date) {
 
     // Add all lessons to the output
     for (let lesson = 0; lesson < lessons.length; lesson++) {
-        if (!lessons[lesson].studentHas(groups)) continue
+        if (!lessons[lesson].studentHas(settings.get("groups"))) continue
 
-        if (future_countdown) outStr += lessons[lesson].getString(date, show_previous, [currentSchedule])
+        if (settings.get("futureCountdown")) outStr += lessons[lesson].getString(date, settings.get("showPrevious"), [currentSchedule])
         else outStr += lessons[lesson].getTimeString([currentSchedule])
     }
     document.getElementById("nextDay").innerHTML = outStr
@@ -217,7 +210,7 @@ function getNextDay(date) {
     // If we did output anything, add a title
     if (outStr.length > 0) {
         // Get the date
-        nextDate = getLessonDate(seperators, week, weekday)
+        let nextDate = getLessonDate(seperators, week, weekday)
 
         // Set the title to `${weekday} {date}/{month}`
         document.getElementById("nextDayTitle").innerHTML = days[weekday]+" "+nextDate.getDate()+"/"+(nextDate.getMonth()+1)+"/"+nextDate.getFullYear()

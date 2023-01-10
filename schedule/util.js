@@ -47,6 +47,103 @@ function lessonInDaySchedule(schedule, lesson) {
     return false
 }
 
+class Setting {
+    /**
+     * @param {any} value 
+     * @param {SaveType} cookie 
+     * @param {SaveType} queryParam 
+     */
+    constructor(value, cookie, queryParam) {
+        this.value = value
+        this.cookie = cookie
+        this.queryParam = queryParam
+    }
+    get() {
+        return this.value
+    }
+    set(value) {
+        this.value = value
+        return true
+    }
+    getURIComponent() {
+        return encodeURIComponent(this.queryParam.name) + "=" +
+        encodeURIComponent(this.queryParam.encode(this.value))
+    }
+}
+
+class SaveType {
+    /**
+     * @param {string} name 
+     * @param {Function} encoder 
+     * @param {Function} decoder 
+     */
+    constructor(name, encoder, decoder) {
+        this.name = name,
+        this.encode = encoder
+        this.decode = decoder
+    }
+    copy(name=this.name) {
+        return new SaveType(name, this.encode, this.decode)
+    }
+}
+
+class Settings {
+    constructor() {
+        // Default encoders/decoders
+        this.stringType = new SaveType("", val=>val, val=>val)
+        this.intType = new SaveType("", val=>val, val=>parseInt(val))
+        this.floatType = new SaveType("", val=>val, val=>parseFloat(val))
+        this.boolType = new SaveType("", val=>+val, val=>val==="1")
+        this.jsonType = new SaveType("", val=>JSON.stringify(val), val=>JSON.parse(val))
+
+        this.queryParams = new Proxy(new URLSearchParams(window.location.search), {
+            //@ts-ignore
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+        /** @type {Object.<string, Setting>} */
+        this.values = {}
+    }
+    set(name, value) {
+        return this.values[name]?.set(value)
+    }
+    get(name) {
+        return this.values[name]?.get()
+    }
+    /**
+     * @param {string} name 
+     * @param {SaveType} cookie 
+     * @param {SaveType} queryParam 
+     * @param {any} defaultValue 
+     */
+    addSetting(name, cookie, queryParam, defaultValue) {
+        let value = defaultValue
+        if (getCookie(cookie.name) !== null) value = cookie.decode(getCookie(cookie.name))
+        if (this.queryParams[queryParam.name] !== null) value = queryParam.decode(this.queryParams[queryParam.name])
+
+        this.values[name] = new Setting(value, cookie, queryParam)
+    }
+    saveCookies() {
+        for (let setting in this.values) {
+            let settingItem = this.values[setting]
+            createCookie(settingItem.cookie.name, settingItem.cookie.encode(settingItem.value), null)
+        }
+    }
+    removeCookies() {
+        for (let setting in this.values) {
+            createCookie(this.values[setting].cookie.name, null, -1)
+        }
+    }
+    generateLink() {
+        let settingStrings = []
+        for (let setting in this.values) {
+            settingStrings.push(
+                this.values[setting].getURIComponent()
+            )
+        }
+        return window.location.origin + window.location.pathname + '?' + settingStrings.join("&")
+    }
+}
+
 /**
  * Convert a group list into groups seperated by seperator
  * @param {string[]} groups 
