@@ -9,12 +9,16 @@
         },
         "schedule": {
             "type": "array",
+            "description": "weeks",
             "items": {
                 "type": "array",
+                "description": "days",
                 "items": {
                     "type": "array",
+                    "description": "lessons",
                     "items": {
                         "type": "array",
+                        "description": "lesson properties",
                         "items": [
                             { 
                                 "oneOf": [
