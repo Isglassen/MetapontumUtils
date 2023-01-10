@@ -85,8 +85,8 @@ $(document).ready(async function() {
 
     console.group("Loading");
     ({ allGroups, schedule, currentSchedule, seperators } = await loadFn());
-    console.log("Loaded");
     console.groupEnd();
+    console.log("Loaded");
 
     let groupList = settings.get("groups")
     if (!currentSchedule.startsWith("__")) { if (!(currentSchedule === "")) addGroup(groupList, currentSchedule) }
