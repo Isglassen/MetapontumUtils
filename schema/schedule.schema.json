@@ -19,6 +19,8 @@
                     "items": {
                         "type": "array",
                         "description": "lesson properties",
+                        "minItems": 7,
+                        "maxItems": 8,
                         "items": [
                             { 
                                 "oneOf": [
@@ -32,7 +34,10 @@
                             { "type": "number", "description": "start minute" },
                             { "type": "number", "description": "end hour" },
                             { "type": "number", "description": "end minute" },
-                            { "type": "string", "description": "style" }
+                            { "anyOf": [
+                                { "type": "string" },
+                                { "type": "null" }
+                            ], "description": "style" }
                         ]
                     }
                 }
