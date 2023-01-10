@@ -1,4 +1,5 @@
 {
+    "$schema": "https://isglassen.github.io/MetapontumUtils/schema/scheduleContainer.schema.json",
     "name": "9A",
     "schedule": [
         [
