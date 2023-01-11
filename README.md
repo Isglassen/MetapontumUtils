@@ -14,6 +14,7 @@
   - Påbörjat med en 9A extra S för Ma3c lektionen
 - Intällning för att vissa start och slut för en lektion samtidigt (Åtminstone för klockslag)
   - Finns nu för klockslag
+- Dark Mode
 
 ### Kod (irellevant för användare)
 
